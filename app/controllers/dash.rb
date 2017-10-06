@@ -1,12 +1,21 @@
 Stram::App.controllers :dash do
- 
-  get '/', :map => '/' do
-    render "dash/index"
+  # get :hls, :map => '/old' do
+  #   render "dash/index"
+  # end
+
+  get :vjs, :map => '/' do
+    if session[:is_subscriber]
+      render "dash/safari"
+    elsif session[:is_auth]
+      redirect url_for(:auth, :no_sub)
+    else
+      redirect url_for(:auth, :new)
+    end
   end
 
-  get '/login', :map => '/login' do
-    halt 500
-  end
+  # get :test do
+  #   render "dash/testauth"
+  # end
 
   # get :index, :map => '/foo/bar' do
   #   session[:foo] = 'bar'

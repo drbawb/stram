@@ -14,8 +14,10 @@ source 'https://rubygems.org'
 # gem 'oj'
 
 # Project requirements
+gem 'bcrypt'
 gem 'rake'
 gem 'rack-cors'
+gem 'http'
 
 # Component requirements
 
