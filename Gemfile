@@ -18,6 +18,8 @@ gem 'bcrypt'
 gem 'rake'
 gem 'rack-cors'
 gem 'http'
+gem 'oauth2'
+
 
 # Component requirements
 

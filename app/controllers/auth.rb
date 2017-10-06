@@ -23,7 +23,7 @@ Stram::App.controllers :auth do
     auth_uri = URI::HTTPS.build(host: "api.twitch.tv",
                                 path: "/kraken/oauth2/token")
 
-    response = Net::HTTP.post_form(auth_uri, login_opts)
+    response = HTTP.post(auth_uri, params: login_opts)
     token    = JSON.parse(response.body)
     logger.debug "got twitch token :: #{token.to_s}"
 
@@ -33,28 +33,23 @@ Stram::App.controllers :auth do
     user      = JSON.parse(response)
     user_name = user["token"]["user_name"]
 
-    response = HTTP.headers(oauth_opts).get("https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/vale")
-    sub      = JSON.parse(response)
-    logger.debug "got sub :: #{sub.to_s}"
+    logger.debug token["expires_in"]
 
-    session[:is_auth]       = true
-    session[:is_subscriber] = sub["error"].nil? and not sub["_id"].nil?
+    session[:is_auth]        = user_name
+    session[:twitch_token]   = token
+    session[:twitch_user]    = user_name
+    session[:twitch_expires] = Time.now + token["expires_in"]
+
+    logger.warn "csrf match? #{session[:state] == params[:state]} (#{session[:state]} == #{params[:state]})"
+
     redirect url_for(:dash, :vjs)
   end
 
   get :twitch do
-    login_opts = {
-      client_id: ENV["TWITCH_CLIENT_ID"],
-      redirect_uri: TWITCH_REDIRECT_URI,
-      response_type: "code",
-      scope: "openid user_subscriptions"
-    }
-
-    auth_uri = URI::HTTPS.build(host: "api.twitch.tv", 
-                                path: "/kraken/oauth2/authorize",
-                                query: URI.encode_www_form(login_opts))
-
-    redirect auth_uri
+    session[:state] = SecureRandom.base64
+    redirect client.auth_code.authorize_url(redirect_uri: TWITCH_REDIRECT_URI, 
+                                            state: session[:state],
+                                            scope: "user_subscriptions")
   end
 
   get :new do
