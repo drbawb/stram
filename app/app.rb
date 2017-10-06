@@ -4,12 +4,13 @@ module Stram
     register Padrino::Helpers
     enable :sessions
 
-	use Rack::Cors do
-		allow do
-			origins 'metallia.fatalsyntax.com:4000'
-			resource '*', :headers => :any, :methods => [:get]
-		end
-	end
+    use Rack::Cors do
+      allow do
+        origins 'metallia.fatalsyntax.com:4000'
+        resource '*', :headers => :any, :methods => [:get]
+      end
+    end
+
 
     ##
     # Caching support.
