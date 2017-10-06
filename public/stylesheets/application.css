@@ -1,0 +1,17 @@
+.btn {
+  font-weight: bold;
+  text-decoration: none;
+
+  height: 50px;
+  padding: 5px 10px 5px 10px;
+}
+
+.btn-primary {
+  color: #fafafa;
+  background-color: #0000ff;
+}
+
+.btn-danger {
+  color: #fafafa;
+  background-color: #ff0000;
+}

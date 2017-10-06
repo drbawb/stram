@@ -2,10 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>top 10 anime betrayals</title>
+    <title>vale's movie night</title>
+    <%= stylesheet_link_tag :application %>
 
 		<!-- codec stuff -->
-		<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <%= yield_content :head %>
 
 	  <style>
     body { background-color: #232323; color: #b7b7b7; }
@@ -13,45 +15,7 @@
   </head>
 
   <body>
-    <div class="content">
-      <video id="dash-player" style="width: 70vw;" controls></video>
-    </div>
-		<div class="help" style="font-family: sans-serif; overflow: scroll;">
-			<p>To enter chat, set a nickname in the `nick` field, scroll down and click `Connect`</p>
-			<p>Stream quality should automatically adjust to your available bandwidth.</p>
-			<p>Please report any problems you're having in chat/discord, thanks!</p>
-      <p>(as a rule of thumb: if you're having problems, just refresh... a lot.)</p>
-			<p>P.S: if you pause or seek too far back the movie will "skip" to present time. <em>GOTTA GO FAST</em></p>
-		</div>
-
-
-    <script>
-if(Hls.isSupported()) {
-	var video = document.getElementById('dash-player');
-	var hls = new Hls();
-	hls.loadSource('http://seraphina.fatalsyntax.com:9001/hls/test.m3u8');
-	hls.attachMedia(video);
-	hls.on(Hls.Events.MANIFEST_PARSED,function() {
-		video.play();
-	});
-
-  hls.on(Hls.Events.ERROR, function (evt, data) {
-    var errorType = data.type;
-    var errorDetails = data.details;
-    var errorFatal = data.fatal;
-    console.warn("error: " + errorType);
-    console.warn(data);
-    console.warn(evt);
-
-    if (errorType === 'networkError' && 
-			  (errorDetails === 'manifestLoadError' || errorDetails === 'levelLoadError')) {
-      setTimeout(function() { hls.loadSource('http://seraphina.fatalsyntax.com:9001/hls/test.m3u8') }, 1000);
-    }
-  });
-} else { alert("this browser doesnt support HLS, yell at drbawb"); }
-    </script>
-
-    <iframe src="http://metallia.fatalsyntax.com:9002" style="width: 30vw; height: 100vh; position: absolute; top: 0; right: 0;"></iframe>
+    <%= yield %>
   </body>
 
 </html>
