@@ -45,7 +45,7 @@ html,body { padding: 0; margin: 0; height: 100%; }
 #alleluia-emote-menu {
   position: absolute;
   right: 0; bottom: 0; 
-  width: 150px; height: 150px;
+  width: 150px; height: 160px;
   background-color: #000000;
 
   display: flex;
@@ -88,6 +88,8 @@ html,body { padding: 0; margin: 0; height: 100%; }
 .alleluia-line-vale > span.alleluia-name { color: #efff32; }
 .alleluia-line-hime > span.alleluia-name { color: #14ffbd; }
 .alleluia-line-mods > span.alleluia-name { color: #ff5733; }
+
+div.vjs-error-display.vjs-modal-dialog { display: none; }
 
 @media only screen and (min-width: 640px) {
   .container {

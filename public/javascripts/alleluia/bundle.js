@@ -251,6 +251,19 @@ module.exports = (function() {
         var user = message.fields[0];
         roomname = message.fields[1];
 
+        for (var tag in user.tags) {
+          if (!user.tags.hasOwnProperty(tag)) { continue; }
+
+          // HACK: uid probably should be a parsed target
+          //       but apparently the real API doesn't pull it out
+          //       RIP ...
+          emitTag({
+            uid:   { fields: [user.uid] },
+            key:   tag,
+            value: user.tags[tag]
+          });
+        }
+
         // inform listeners that you have joined a new channel
         emitJoin(user);
 
