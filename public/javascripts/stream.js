@@ -56,3 +56,16 @@ myVideoPlayer.play();
 setInterval(function() {
   myVideoPlayer.healthCheck();
 }, myVideoPlayer.checkInterval * 1000);
+
+videojs('my-video').ready(function() {
+  var myPlayer    = this;
+  var aspectRatio = 9/16; // TODO: read from video?
+  function resizeFrame() {
+    var width = document.getElementById(myPlayer.id()).parentElement.offsetWidth;
+    myPlayer.width(width);
+    myPlayer.height(width * aspectRatio);
+  }
+
+  resizeFrame();
+  window.onresize = resizeFrame;
+});
