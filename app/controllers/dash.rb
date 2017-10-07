@@ -3,6 +3,10 @@ Stram::App.controllers :dash do
   #   render "dash/index"
   # end
 
+  get :chat do
+    render "dash/chat"
+  end
+
   get :vjs, :map => '/' do
     if session[:is_auth] && is_twitch_sub
       render "dash/safari"

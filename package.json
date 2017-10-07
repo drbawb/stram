@@ -1,0 +1,15 @@
+{
+  "name": "stram",
+  "version": "0.1.0",
+  "devDependencies": {
+    "browserify": "^4.1.10",
+    "gulp": "^3.8.0",
+    "gulp-concat": "^2.2.0",
+    "gulp-jshint": "^1.8.4",
+    "jasmine": "^2.0.1",
+    "merge-stream": "^0.1.6",
+    "sha1": "^1.1.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^0.1.1"
+  }
+}
