@@ -1,3 +1,44 @@
+html,body { padding: 0; margin: 0; height: 100%; }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.movie-box {
+  display: flex; flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+
+  background-color: #000000;
+}
+
+.chat-box {
+  display: flex; flex-grow: 2;
+  flex-direction: column;
+  min-width: 360px;
+  margin: 5px 5px 10px 5px;
+}
+
+
+@media only screen and (min-width: 640px) {
+  .container {
+    flex-direction: row;
+  }
+
+  .chat-box {
+    min-width: 250px;
+  }
+}
+
+@media only screen and (min-width: 960px) {
+  .chat-box {
+    min-width: 360px;
+  }
+}
+
 .btn {
   font-weight: bold;
   text-decoration: none;
@@ -14,4 +55,15 @@
 .btn-danger {
   color: #fafafa;
   background-color: #ff0000;
+}
+
+#alleluia-messages { overflow-y: auto; }
+#alleluia-prompt { margin-top: auto; }
+
+.alleluia-line {
+  font-family: sans-serif;  
+}
+
+.alleluia-line-sys {
+  color: #00ff00;
 }

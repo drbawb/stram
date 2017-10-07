@@ -1,0 +1,36 @@
+<% content_for :head do %>
+  <link href="http://vjs.zencdn.net/6.2.7/video-js.css" rel="stylesheet">
+  <script src="http://vjs.zencdn.net/6.2.7/video.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.10.1/videojs-contrib-hls.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<% end %>
+
+<div class="container">
+  <div class="movie-box">
+		<video id="my-video" class="video-js" playsinline controls preload="auto"
+			poster="MY_VIDEO_POSTER.jpg" 
+			data-setup='{ "fluid": true }'>
+
+			<source src="http://seraphina.fatalsyntax.com:9001/hls/test.m3u8" type="application/x-mpegURL">
+
+			<p class="vjs-no-js">
+				To view this video please enable JavaScript, and consider upgrading to a web browser that
+				<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+			</p>
+		</video>
+
+<!--
+		<div class="help" style="font-family: sans-serif; overflow: scroll;">
+			<p>To enter chat, set a nickname in the `nick` field, scroll down and click `Connect`</p>
+			<p>Stream quality should automatically adjust to your available bandwidth.</p>
+			<p>Please report any problems you're having in chat/discord, thanks!</p>
+			<p>(as a rule of thumb: if you're having problems, just refresh... a lot.)</p>
+			<p>P.S: if you pause or seek too far back the movie will "skip" to present time. <em>GOTTA GO FAST</em></p>
+		</div>
+-->
+  </div>
+
+  <%= render_partial "dash/chatbox" %>
+</div>
+
+<%= javascript_include_tag "stream" %>

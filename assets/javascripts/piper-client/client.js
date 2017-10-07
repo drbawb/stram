@@ -2,24 +2,21 @@ console.log("starting text-mode client");
 $(document).ready(function() {
 	var client  = require('./chat/events.js'); // TODO: really, really bad module name.
 
-	// ask for permission to display thinguses. es.
-	var _userPoses  = [];
-	var _canDisplay = false;
-
-	if (typeof Notification !== 'undefined') {
-		if (Notification.permission === 'default') {
-			Notification.requestPermission( function(status) {
-				if (status === 'granted') { _canDisplay = true; }
-			});
-		} else if (Notification.permission === 'granted') {
-			_canDisplay = true;
-		}
-	}
-
   var ui = {
     messages:  $("#alleluia-messages"),
     inputBox:  $("#alleluia-input"),
     submitBtn: $("#alleluia-submit"),
+  };
+
+  var appendMessage = function(type, msg) {
+    var message = $("<div>")
+      .addClass("alleluia-line")
+      .addClass("alleluia-line-" + type);
+
+    message.html(msg);
+    message.appendTo(ui.messages);
+
+    ui.messages[0].scrollTop = ui.messages[0].scrollHeight;
   };
 
   // bootstrap client
@@ -30,31 +27,13 @@ $(document).ready(function() {
     console.log(uid);
   });
 
-  client.onJoin(function(room) {
+  client.onJoin(function(user) {
     console.log("join caught ...");
-    var users = room.getUsers();
-
-    for (var idx in users) {
-      console.log("-- processing user...");
-      console.log(users[idx]);
-      console.log("-- done w/ user ....");
-    }
+    appendMessage('sys', `${user.name} has joined the chat.`);
   });
 
   client.onMessage(function(user, msg) {
-    if (_canDisplay && !document.hasFocus()) {
-      var title = user.name + " said:";
-      var n = new Notification(title, {body: msg});
-      n.onshow = function() {
-        setTimeout(function() {
-          n.close();
-        }, 5000);
-      };
-    }
-
-    var message = $("<div>").addClass("alleluia-line-other");
-    message.html(`${user.name}: ${msg}`);
-    message.appendTo(ui.messages);
+    appendMessage('default', `<strong>${user.name}</strong>: ${msg}`);
   });
 
   // what happens when we receive a tag?

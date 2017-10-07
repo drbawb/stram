@@ -1,5 +1,11 @@
-<div class="content">
-  <video id="dash-player" style="width: 69vw;" controls></video>
+<div class="container">
+  <div class="movie-box">
+    <video id="dash-player" style="width: 69vw;" controls></video>
+  </div>
+
+  <div class="chat-box">
+    <%= render_partial "dash/chatbox" %>
+  </div>
 </div>
 <div class="help" style="font-family: sans-serif; overflow: scroll;">
 	<p>To enter chat, set a nickname in the `nick` field, scroll down and click `Connect`</p>
@@ -35,5 +41,3 @@ if (errorType === 'networkError' &&
 });
 } else { alert("this browser doesnt support HLS, yell at drbawb"); }
 </script>
-
-<iframe src="http://metallia.fatalsyntax.com:9002" style="width: 30vw; height: 100vh; position: absolute; top: 0; right: 0;"></iframe>

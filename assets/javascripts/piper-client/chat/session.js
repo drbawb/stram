@@ -70,15 +70,7 @@ module.exports = (function() {
 
 	function emitJoin(user) {
 		if (typeof joinRoomEmitter !== "undefined") {
-			console.log("emitting own join...");
-			var roomApi = {};
-			var users   = [user];
-			
-			roomApi.getUsers = function() {
-				return users;
-			};
-
-			joinRoomEmitter(roomApi);
+			joinRoomEmitter(user);
 		}
 	}
 

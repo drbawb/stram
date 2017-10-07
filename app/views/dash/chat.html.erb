@@ -1,11 +1,1 @@
-<div class="chat">
-  <form id="alleluia-connect">
-    <input type="hidden" value="<%= session[:is_auth] %>" />
-  </form>
-
-  <div id="alleluia-messages"></div>
-  <input type="text" id="alleluia-input" />
-  <input type="button" id="alleluia-submit" value="Submit" />
-</div>
-
-<%= javascript_include_tag "alleluia/bundle" %>
+<%= render_partial "dash/chatbox" %>
