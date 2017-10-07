@@ -25,7 +25,10 @@ module.exports = (function() {
     console.log("starting client ...");
 
     // connects to that server, joins room on success...
-		connectServer(function() { joinRoom(); });
+		connectServer(function() { 
+      joinRoom();    // join movie night
+      tagTwitchId(); // z00z made me do it
+    });
 	};
 
 	// returns true if logged in user matches provided uid
@@ -59,6 +62,14 @@ module.exports = (function() {
           roomname,
           username,
           msg)));
+  };
+
+  me.sendTag = function(key, val) {
+    ws.send(JSON.stringify(Nirvash.tagUser(
+      uid,
+      roomname,
+      key,
+      val)));
   };
 
 	// private functions
@@ -175,21 +186,24 @@ module.exports = (function() {
 
     // register user
     ws.onopen = function() {
-      username = "drbawb";
-
+      username = $("#alleluia-connect-name").val();
       var cmd = Nirvash.registerUser(username);
       ws.send(JSON.stringify(cmd));
     };
 	}
 
 	function joinRoom() {
-		var room = "movienight";
-		var path = '/rooms/' + room;
+		roomname = "movienight";
+		var path = '/rooms/' + roomname;
 		var method = { variant: "Subscribe", fields: [] };
 		var uri    = { variant: "Resource", fields: [method, path, null] };
 
 		ws.send(JSON.stringify(uri));
 	}
+
+  function tagTwitchId() {
+    me.sendTag("x-twitch-id", $("#alleluia-connect-id").val());
+  }
 
 	return me;
 }());

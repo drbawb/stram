@@ -1,6 +1,7 @@
 module Stram
   class App
     module AuthHelper
+      TWITCH_VALE_ID=27645199
       TWITCH_REDIRECT_URI="http://valestream.fatalsyntax.com/auth/twitch/callback"
 
       def client
@@ -41,14 +42,20 @@ module Stram
         token = session[:twitch_token]
         
         # use authorization to check channel sub
-        oauth_opts = {"Client-ID": ENV["TWITCH_CLIENT_ID"], "Authorization" => "OAuth #{token["access_token"]}"}
+        oauth_opts = {
+          "Client-ID": ENV["TWITCH_CLIENT_ID"],
+          "Authorization" => "OAuth #{token["access_token"]}",
+          "Accept" => "application/vnd.twitchtv.v5+json"
+        }
         response  = HTTP.headers(oauth_opts).get("https://api.twitch.tv/kraken")
         user      = JSON.parse(response)
-        user_name = user["token"]["user_name"]
-
-        response = HTTP.headers(oauth_opts).get("https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/vale")
+        user_name = user["token"]["user_id"]
+        
+        sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
+        response = HTTP.headers(oauth_opts).get(sub_uri)
         sub      = JSON.parse(response)
         logger.debug "got sub :: #{sub.to_s}"
+        logger.debug "sub_uri :: #{sub_uri}"
 
         sub["error"].nil? and not sub["_id"].nil?
       end

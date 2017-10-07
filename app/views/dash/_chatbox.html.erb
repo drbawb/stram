@@ -1,6 +1,7 @@
 <div class="chat-box">
   <form id="alleluia-connect">
-    <input type="hidden" value="<%= session[:is_auth] %>" />
+    <input id="alleluia-connect-name" type="hidden" value="<%= session[:twitch_user] %>" />
+    <input id="alleluia-connect-id" type="hidden" value=<%= session[:twitch_id] %> />
   </form>
 
   <div id="alleluia-messages"></div>

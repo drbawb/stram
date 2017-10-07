@@ -28,16 +28,23 @@ Stram::App.controllers :auth do
     logger.debug "got twitch token :: #{token.to_s}"
 
     # use authorization to check channel sub
-    oauth_opts = {"Client-ID": ENV["TWITCH_CLIENT_ID"], "Authorization" => "OAuth #{token["access_token"]}"}
+    oauth_opts = {
+      "Client-ID": ENV["TWITCH_CLIENT_ID"],
+      "Authorization" => "OAuth #{token["access_token"]}",
+      "Accept" => "application/vnd.twitchtv.v5+json"
+    }
+
     response  = HTTP.headers(oauth_opts).get("https://api.twitch.tv/kraken")
     user      = JSON.parse(response)
     user_name = user["token"]["user_name"]
+    user_id   = user["token"]["user_id"]
 
     logger.debug token["expires_in"]
 
     session[:is_auth]        = user_name
     session[:twitch_token]   = token
     session[:twitch_user]    = user_name
+    session[:twitch_id]      = user_id
     session[:twitch_expires] = Time.now + token["expires_in"]
 
     logger.warn "csrf match? #{session[:state] == params[:state]} (#{session[:state]} == #{params[:state]})"
@@ -49,7 +56,7 @@ Stram::App.controllers :auth do
     session[:state] = SecureRandom.base64
     redirect client.auth_code.authorize_url(redirect_uri: TWITCH_REDIRECT_URI, 
                                             state: session[:state],
-                                            scope: "user_subscriptions")
+                                            scope: "user_read user_subscriptions")
   end
 
   get :new do

@@ -57,11 +57,24 @@ html,body { padding: 0; margin: 0; height: 100%; }
   background-color: #ff0000;
 }
 
+.emote { width: 28px; height: 28px; }
+
 #alleluia-messages { overflow-y: auto; }
 #alleluia-prompt { margin-top: auto; }
 
 .alleluia-line {
   font-family: sans-serif;  
+}
+
+.alleluia-line > span.alleluia-name { 
+  margin-right: 10px;
+  font-weight: bold; 
+}
+
+.alleluia-line-barcode > span.alleluia-name {
+  font-family: 'Libre Barcode 39 Extended', sans-serif;
+  font-weight: normal;
+  font-size: 16px;
 }
 
 .alleluia-line-sys {
