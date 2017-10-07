@@ -73,15 +73,21 @@ html,body { padding: 0; margin: 0; height: 100%; }
   font-weight: bold; 
 }
 
-.alleluia-line-barcode > span.alleluia-name {
+.alleluia-line-sys {
+  color: #00ff00;
+}
+
+/* flair stuff */
+.alleluia-line-overlord > span.alleluia-name {
+  color: #d29af8;
   font-family: 'Libre Barcode 39 Extended', sans-serif;
   font-weight: normal;
   font-size: 16px;
 }
 
-.alleluia-line-sys {
-  color: #00ff00;
-}
+.alleluia-line-vale > span.alleluia-name { color: #efff32; }
+.alleluia-line-hime > span.alleluia-name { color: #14ffbd; }
+.alleluia-line-mods > span.alleluia-name { color: #ff5733; }
 
 @media only screen and (min-width: 640px) {
   .container {

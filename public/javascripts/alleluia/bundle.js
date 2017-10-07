@@ -311,8 +311,26 @@ console.log("starting text-mode client");
 $(document).ready(function() {
 	var client  = require('./chat/events.js'); // TODO: really, really bad module name.
 
-  var funnyBusiness = ["81500175"];
   var uidToTwitchId = {};
+
+  var flair = {
+    "mods":          { style: "mods",     members: ["76912664", "166713997"] },
+    "hime":          { style: "hime",     members: ["47735570"]              },
+    "vale":          { style: "vale",     members: ["27645199"]              },
+    "z00z":          { style: "overlord", members: ["81500175"]              },
+  };
+
+  var flairForUser = function(id) {
+    var style = 'default';
+    for (var level in flair) {
+      if (!flair.hasOwnProperty(level)) { continue; }
+      if (flair[level].members.includes(id)) { 
+        style = flair[level].style; break; 
+      }
+    }
+
+    return style;
+  };
 
   var ui = {
     // main container
@@ -404,8 +422,11 @@ $(document).ready(function() {
 
   client.onMessage(function(user, msg) {
     var twitchId = uidToTwitchId[user.uid];
-    var style    = funnyBusiness.includes(twitchId) ? 'barcode' : 'default';
-    appendMessage(style, user.name, msg);
+    var style = flairForUser(twitchId);
+    var name  = user.name;
+    if (style === 'hime') { name = 'hime~'; }
+
+    appendMessage(style, name, msg);
   });
 
   // what happens when we receive a tag?
