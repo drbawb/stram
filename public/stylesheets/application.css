@@ -18,7 +18,7 @@ html,body { padding: 0; margin: 0; height: 100%; }
 .chat-box {
   display: flex; flex-grow: 2;
   flex-direction: column;
-  min-width: 360px;
+  width: 360px;
 }
 
 .btn {
@@ -55,7 +55,7 @@ html,body { padding: 0; margin: 0; height: 100%; }
 
 #alleluia-emote-menu.hidden { display: none; }
 
-#alleluia-messages { overflow-y: auto; }
+#alleluia-messages { overflow-y: auto; word-wrap: break-word; }
 #alleluia-prompt {
   display: flex; 
   flex-direction: row; 
@@ -97,7 +97,7 @@ div.vjs-error-display.vjs-modal-dialog { display: none; }
   }
 
   .chat-box {
-    min-width: 250px;
+    width: 250px;
   }
 }
 
