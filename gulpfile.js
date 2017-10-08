@@ -2,6 +2,7 @@ var gulp = require('gulp');
 
 // deps
 var browserify = require('browserify');
+var babel  = require('gulp-babel');
 var concat = require('gulp-concat');
 var jshint = require('gulp-jshint');
 
@@ -26,7 +27,8 @@ gulp.task('browserify', function() {
 		
 	return merge(license, bundler)
 		   .pipe(concat('bundle.js'))
-	       .pipe(gulp.dest('./public/javascripts/alleluia'));
+       .pipe(babel())
+	     .pipe(gulp.dest('./public/javascripts/alleluia'));
 });
 
 gulp.task('lint', function() {

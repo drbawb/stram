@@ -65,11 +65,10 @@ $(document).ready(function() {
     var out  = ""; 
     var head = 0;
 
-    // matcher
-    var re = /:vale.*?:/g;
-    var m;
-
-    do { // pump matcher, substituting emotes
+    // match :vale(emoteName): and substitute each one if it
+    // w/ an image if it is a valid emote
+    var m; var re = /:vale.*?:/g;
+    do {
       m = re.exec(msg);
       if (m && emotes[m[0]]) {
         out += msg.substring(head, m.index);
@@ -98,17 +97,26 @@ $(document).ready(function() {
     ui.messages[0].scrollTop = ui.messages[0].scrollHeight;
   };
 
+  var printUsers = function() {
+    for (var key in userList) {
+      appendMessage("sys", "System", userList[key]);
+    }
+  };
+
   // bootstrap client
   client.init();
 
+  var userList = {};
   client.onDisconnect(function(uid) {
-    console.log("disconnect caught...");
-    console.log(uid);
+    console.log(`disconnect for: ${uid}`);
+    appendMessage("sys", "Part", userList[uid]);
+    delete userList[uid];
   });
 
   client.onJoin(function(user) {
     console.log("join caught ...");
-    appendMessage('sys', "System", `${user.name} has joined the chat.`);
+    userList[user.uid] = user.name;
+    appendMessage("sys", "Join", user.name);
   });
 
   client.onMessage(function(user, msg) {
@@ -136,6 +144,12 @@ $(document).ready(function() {
   ui.inputBox.on("keyup", function(evt) {
     if (evt.keyCode === 13) { // press enter
       var msg = ui.inputBox.val(); ui.inputBox.val("");
+
+      switch (msg) {
+        case "/users":
+          printUsers(); return;
+      };
+
       console.log("sending: " + msg);
       client.sendMessage(msg);     
     };
