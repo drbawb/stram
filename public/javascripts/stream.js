@@ -5,14 +5,14 @@ var myVideoPlayer = {
 
   healthCheck: function() {
     var error = this.player.error();
-    console.log(error);
+    //console.log(error);
     if (error) {
       this.play();
       return;
     }
 
     var readyState = this.player.readyState();
-    console.log(readyState);
+    //console.log(readyState);
     switch(readyState) {
       case 0:
         this.play();
@@ -26,13 +26,15 @@ var myVideoPlayer = {
       default:
         return;
     }
-    console.log(this.readyStateOneDuration);
-    console.log(this.readyStateTwoDuration);
+    //console.log(this.readyStateOneDuration);
+    //console.log(this.readyStateTwoDuration);
     if (this.readyStateOneDuration >= 30
       || this.readyStateTwoDuration >= 30) {
       this.play();
       return;
     }
+
+    document.getElementById("alleluia-input").focus();
   },
 
   play: function() {

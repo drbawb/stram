@@ -1,5 +1,16 @@
 html,body { padding: 0; margin: 0; height: 100%; }
 
+body { font-family: sans-serif; }
+
+
+a {
+  color: #ffffff;
+}
+
+a:visited {
+  color: #bababa;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -24,17 +35,23 @@ html,body { padding: 0; margin: 0; height: 100%; }
 }
 
 .btn {
+  display: inline-block;
   font-weight: bold;
+  font-family: sans-serif;
   text-decoration: none;
 
-  height: 50px;
+  height: 50px; line-height: 50px;
+  vertical-align: middle;
   padding: 5px 10px 5px 10px;
+  margin: 5px 5px 5px 5px;
 }
 
 .btn-primary {
   color: #fafafa;
-  background-color: #0000ff;
+  background-color: #42525d;
 }
+
+.btn-primary:hover { box-shadow: inset 0px 0px 25px #000; }
 
 .btn-danger {
   color: #fafafa;
@@ -76,7 +93,8 @@ html,body { padding: 0; margin: 0; height: 100%; }
 }
 
 .alleluia-line-sys {
-  color: #00ff00;
+  color: #7d7d7d;
+  font-size: .70em;
 }
 
 /* flair stuff */
@@ -103,8 +121,10 @@ div.vjs-error-display.vjs-modal-dialog { display: none; }
 
   .chat-box {
     flex-grow: initial;
-    width: 360px;
+    width: 250px; padding: 0 10px 0 10px;
   }
 }
 
-
+@media only screen and (min-width: 960px) {
+  .chat-box { width: 360px; padding: 0 10px 0 10px; }
+}
