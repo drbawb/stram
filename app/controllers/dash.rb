@@ -8,7 +8,7 @@ Stram::App.controllers :dash do
   end
 
   get :vjs, :map => '/' do
-    if session[:is_auth] && is_twitch_sub
+    if session[:is_auth] && (is_vale || is_twitch_sub)
       render "dash/safari"
     elsif session[:is_auth]
       redirect url_for(:auth, :no_sub)

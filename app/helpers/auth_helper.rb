@@ -36,6 +36,10 @@ module Stram
           session[:twitch_token] = token
         end
       end
+      
+      def is_vale
+        TWITCH_VALE_ID == session[:twitch_id]
+      end
 
       def is_twitch_sub
         refresh_session
@@ -51,13 +55,18 @@ module Stram
         user      = JSON.parse(response)
         user_name = user["token"]["user_id"]
         
-        sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
-        response = HTTP.headers(oauth_opts).get(sub_uri)
-        sub      = JSON.parse(response)
-        logger.debug "got sub :: #{sub.to_s}"
-        logger.debug "sub_uri :: #{sub_uri}"
+        begin
+          sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
+          response = HTTP.headers(oauth_opts).get(sub_uri)
+          sub      = JSON.parse(response)
+          logger.debug "got sub :: #{sub.to_s}"
+          logger.debug "sub_uri :: #{sub_uri}"
 
-        sub["error"].nil? and not sub["_id"].nil?
+          sub["error"].nil? and not sub["_id"].nil?
+        rescue JSON::ParserError => err
+          logger.warn "failed to get subscriber response"
+          false
+        end
       end
     end
 
