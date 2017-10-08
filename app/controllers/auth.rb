@@ -56,7 +56,7 @@ Stram::App.controllers :auth do
     session[:state] = SecureRandom.base64
     redirect client.auth_code.authorize_url(redirect_uri: TWITCH_REDIRECT_URI, 
                                             state: session[:state],
-                                            scope: "user_read user_subscriptions")
+                                            scope: "user_subscriptions")
   end
 
   get :new do
