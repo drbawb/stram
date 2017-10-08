@@ -4,6 +4,8 @@ var myVideoPlayer = {
   readyStateTwoDuration: 0,
 
   healthCheck: function() {
+    document.getElementById("alleluia-input").focus();
+
     var error = this.player.error();
     //console.log(error);
     if (error) {
@@ -33,8 +35,6 @@ var myVideoPlayer = {
       this.play();
       return;
     }
-
-    document.getElementById("alleluia-input").focus();
   },
 
   play: function() {

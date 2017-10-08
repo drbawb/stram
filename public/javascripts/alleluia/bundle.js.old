@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  *
  * Piper - the javascript `nirvash protocol` 2D chat client.
@@ -34,9 +32,7 @@
         var n = t[o][1][e];return s(n ? n : e);
       }, f, f.exports, e, t, n, r);
     }return n[o].exports;
-  }var i = typeof require == "function" && require;for (var o = 0; o < r.length; o++) {
-    s(r[o]);
-  }return s;
+  }var i = typeof require == "function" && require;for (var o = 0; o < r.length; o++) s(r[o]);return s;
 })({ 1: [function (require, module, exports) {
     var Session = require('./session.js');
 
@@ -332,11 +328,10 @@
         "mods": { style: "mods", members: ["76912664", "166713997"] },
         "hime": { style: "hime", members: ["47735570"] },
         "vale": { style: "vale", members: ["27645199"] },
-        "juice": { style: "juice", members: ["100783701"] },
         "z00z": { style: "overlord", members: ["81500175"] }
       };
 
-      var flairForUser = function flairForUser(id) {
+      var flairForUser = function (id) {
         var style = 'default';
         for (var level in flair) {
           if (!flair.hasOwnProperty(level)) {
@@ -387,7 +382,7 @@
         ":valeYo:": { path: "/images/valemotes/valeYo.png" }
       };
 
-      var scanForEmotes = function scanForEmotes(msg) {
+      var scanForEmotes = function (msg) {
         // output buffer
         var out = "";
         var head = 0;
@@ -399,7 +394,7 @@
           m = re.exec(msg);
           if (m && emotes[m[0]]) {
             out += msg.substring(head, m.index);
-            out += "<img class=\"emote\" src=\"" + emotes[m[0]].path + "\" alt=\"" + m[0] + "\"/>";
+            out += `<img class="emote" src="${emotes[m[0]].path}" alt="${m[0]}"/>`;
             head = m.index + m[0].length;
           }
         } while (m);
@@ -408,7 +403,7 @@
         return out + msg.substring(head);
       };
 
-      var appendMessage = function appendMessage(type, name, msg) {
+      var appendMessage = function (type, name, msg) {
         var line = $("<div>").addClass("alleluia-line").addClass("alleluia-line-" + type);
 
         msg = scanForEmotes(msg);
@@ -422,7 +417,7 @@
         ui.messages[0].scrollTop = ui.messages[0].scrollHeight;
       };
 
-      var printUsers = function printUsers() {
+      var printUsers = function () {
         for (var key in userList) {
           appendMessage("sys", "System", userList[key]);
         }
@@ -433,7 +428,7 @@
 
       var userList = {};
       client.onDisconnect(function (uid) {
-        console.log("disconnect for: " + uid);
+        console.log(`disconnect for: ${uid}`);
         appendMessage("sys", "Part", userList[uid]);
         delete userList[uid];
       });
@@ -503,33 +498,26 @@
       });
 
       // populate the emote menu
-
-      var _loop = function _loop() {
+      for (var key in emotes) {
         if (!emotes.hasOwnProperty(key)) {
-          return "continue";
+          continue;
         }
-        var shortCode = key;
-        var imgUrl = emotes[key].path;
+        let shortCode = key;
+        let imgUrl = emotes[key].path;
 
         // set up a clickable icon
-        var emoteEl = $("<div>");
-        var emoteIcon = $("<img>");
+        let emoteEl = $("<div>");
+        let emoteIcon = $("<img>");
         emoteIcon.attr("src", imgUrl);
         emoteIcon.addClass("emote");
         emoteIcon.appendTo(emoteEl);
         emoteIcon.on("click", function (evt) {
           console.log("clicked on: " + shortCode);
-          ui.inputBox.val(ui.inputBox.val() + " " + shortCode);
+          ui.inputBox.val(`${ui.inputBox.val()} ${shortCode}`);
           evt.stopPropagation();
         });
 
         emoteEl.appendTo(ui.emoteBox);
-      };
-
-      for (var key in emotes) {
-        var _ret = _loop();
-
-        if (_ret === "continue") continue;
       }
     });
   }, { "./chat/events.js": 1 }] }, {}, [4]);

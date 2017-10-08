@@ -1,6 +1,6 @@
 console.log("starting text-mode client");
 $(document).ready(function() {
-	var client  = require('./chat/events.js'); // TODO: really, really bad module name.
+    var client  = require('./chat/events.js'); // TODO: really, really bad module name.
 
   var uidToTwitchId = {};
 
@@ -8,6 +8,7 @@ $(document).ready(function() {
     "mods":          { style: "mods",     members: ["76912664", "166713997"] },
     "hime":          { style: "hime",     members: ["47735570"]              },
     "vale":          { style: "vale",     members: ["27645199"]              },
+    "juice":         { style: "juice",    members: ["100783701"]             },
     "z00z":          { style: "overlord", members: ["81500175"]              },
   };
 
