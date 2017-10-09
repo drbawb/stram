@@ -1,63 +1,98 @@
-var myVideoPlayer = {
-  checkInterval: 5, // seconds
-  readyStateOneDuration: 0,
-  readyStateTwoDuration: 0,
-
-  healthCheck: function() {
-    document.getElementById("alleluia-input").focus();
-
-    var error = this.player.error();
-    //console.log(error);
-    if (error) {
-      this.play();
-      return;
-    }
-
-    var readyState = this.player.readyState();
-    //console.log(readyState);
-    switch(readyState) {
-      case 0:
-        this.play();
-        return;
-      case 1:
-        this.readyStateOneDuration += this.checkInterval;
-        break;
-      case 2:
-        this.readyStateTwoDuration += this.checkInterval;
-        break;
-      default:
-        return;
-    }
-    //console.log(this.readyStateOneDuration);
-    //console.log(this.readyStateTwoDuration);
-    if (this.readyStateOneDuration >= 30
-      || this.readyStateTwoDuration >= 30) {
-      this.play();
-      return;
-    }
-  },
-
-  play: function() {
-    this.readyStateOneDuration = 0;
-    this.readyStateTwoDuration = 0;
-    try {
-      // console.log('destroying old player');
-      // this.player.dispose();
-      this.player = null;
-    } catch (e) {}
-    this.player = videojs('my-video');
-    this.player.src({
-      src: "//seraphina.fatalsyntax.com:9001/hls/test.m3u8",
-      type: 'application/x-mpegURL',
-      withCredentials: false
-    });
-    this.player.play();
-  }
+// hot new shit...
+var config = {
+  streamURI: "//seraphina.fatalsyntax.com:9001/hls",
+  playlist:  "test",
+  levels:    ["low", "mid", "src"],
 };
-// myVideoPlayer.play();
-// setInterval(function() {
-//   myVideoPlayer.healthCheck();
-// }, myVideoPlayer.checkInterval * 1000);
+
+// /hls/test_mid/index.m3u8
+var streamFound = false;
+var searchForStream = function() {
+  if (streamFound) { return; }
+
+  // first check if the stream descriptor is available
+  var req = new XMLHttpRequest();
+  req.open("GET", `${config.streamURI}/${config.playlist}.m3u8`);
+  req.addEventListener("load", function() {
+    if (this.status !== 200) { console.warn("stream not avail: " + this.status); return; }
+    streamFound = true;
+    testStreamHealth();
+  });
+  req.send();
+
+
+  setTimeout(searchForStream, 1000);
+};
+
+var streamHealth = []
+var testStreamHealth = function() {
+  // create ready flags
+  for (let i = 0; i < config.levels.length; i++) { streamHealth[i] = false; waitForLevel(i); }
+  proceedWhenReady();
+};
+
+var proceedWhenReady = function() {
+  var allReady = true;
+  for (let i = 0; i < streamHealth.length; i++) {
+    if (!streamHealth[i]) { console.warn(`level ${config.levels[i]} not ready`); allReady = false; }
+  }
+
+  if (!allReady) { setTimeout(proceedWhenReady, 500); return; }
+
+  console.log("here we go ...");
+  let player = videojs('my-video');
+  player.src({
+    src: `${config.streamURI}/${config.playlist}.m3u8`,
+    type: 'application/x-mpegURL',
+    withCredentials: false
+  });
+  player.play();
+  installErrorTrap();
+};
+
+var waitForLevel = function(levelIdx) {
+  let levelName = config.levels[levelIdx];
+  console.log("waiting for level: " + config.levels[levelIdx]);
+
+  var req = new XMLHttpRequest();
+  req.open("GET", `${config.streamURI}/${config.playlist}_${levelName}/index.m3u8`);
+  req.addEventListener("load", function() {
+    if (this.status !== 200) { 
+      console.warn("level not avail"); 
+      setTimeout(waitForLevel(levelIdx), 500); 
+      return; 
+    }
+
+    streamHealth[levelIdx] = true;
+  });
+  req.send();
+};
+
+var notReady = 0;
+var installErrorTrap = function() {
+  let player = videojs('my-video');
+  let error  = player.error();
+  let ready  = player.readyState();
+
+  if (ready < 4) { notReady++; }
+  if (ready === 4) { notReady = 0; }
+
+  if (error || (notReady > 10)) {
+    console.warn("not ready: " + notReady);
+    console.warn(error);
+
+    // start looking for stream again
+    notReady = 0;
+    streamFound = false;
+    searchForStream();
+
+    return;
+  }
+
+  setTimeout(installErrorTrap, 1000);
+};
+
+searchForStream();
 
 videojs('my-video').ready(function() {
   var myPlayer    = this;
