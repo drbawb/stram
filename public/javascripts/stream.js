@@ -88,6 +88,13 @@ var installErrorTrap = function() {
     console.warn("not ready: " + notReady);
     console.warn(error);
 
+    // reinit the player to get BRB screen
+    player.src({
+      src: `${config.streamURI}/${config.playlist}.m3u8`,
+      type: 'application/x-mpegURL',
+      withCredentials: false
+    });
+
     // start looking for stream again
     notReady = 0;
     streamFound = false;
