@@ -46,8 +46,19 @@ var proceedWhenReady = function() {
     type: 'application/x-mpegURL',
     withCredentials: false
   });
-  player.play();
-  installErrorTrap();
+
+  player.ready(function() {
+    let qualityLevels = player.qualityLevels(); 
+    console.log(qualityLevels);
+    qualityLevels.on("addqualitylevel", function(evt) {
+      console.log("qual event");
+      console.log(evt);
+    });
+    
+
+    player.play();
+    installErrorTrap();
+  });
 };
 
 var waitForLevel = function(levelIdx) {
@@ -110,6 +121,7 @@ searchForStream();
 
 videojs('my-video').ready(function() {
   var myPlayer    = this;
+  this.qualityLevels();
   var aspectRatio = 9/16; // TODO: read from video?
   function resizeFrame() {
     var width = document.getElementById(myPlayer.id()).parentElement.offsetWidth;
