@@ -78,6 +78,7 @@ a:visited {
 
 #alleluia-stale.hidden { display: none; }
 #alleluia-stale {
+  padding: 5px;
   background-color: #e2dbba;
   color: #73540e;
   border: 1px #73540e solid;
