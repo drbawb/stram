@@ -83,6 +83,14 @@ $(document).ready(function() {
     return out + msg.substring(head);
   };
 
+  var stripEntities = function(msg) {
+    // function is no-op w/o input
+    if (!msg || typeof(msg) !== "string" ) { return msg; }
+    return msg.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+  }
+
   var appendMessage = function(type, name, msg) {
     var line = $("<div>")
       .addClass("alleluia-line")
@@ -138,7 +146,7 @@ $(document).ready(function() {
     var name  = user.name;
     if (style === 'hime') { name = 'hime~'; }
 
-    appendMessage(style, name, msg);
+    appendMessage(style, name, stripEntities(msg));
   });
 
   // what happens when we receive a tag?
