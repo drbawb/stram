@@ -116,7 +116,7 @@
 
       // private state
       var ws = null;
-      var uri = "ws://metallia.fatalsyntax.com:4290";
+      var uri = "wss://valestream.fatalsyntax.com/kyrie";
       var connected = false;
       var uid = "";
       var username = "";

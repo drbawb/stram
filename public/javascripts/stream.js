@@ -47,7 +47,7 @@ var myVideoPlayer = {
     } catch (e) {}
     this.player = videojs('my-video');
     this.player.src({
-      src: "http://seraphina.fatalsyntax.com:9001/hls/test.m3u8",
+      src: "//seraphina.fatalsyntax.com:9001/hls/test.m3u8",
       type: 'application/x-mpegURL',
       withCredentials: false
     });
