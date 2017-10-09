@@ -52,17 +52,24 @@ var proceedWhenReady = function() {
 
 var waitForLevel = function(levelIdx) {
   let levelName = config.levels[levelIdx];
-  console.log("waiting for level: " + config.levels[levelIdx]);
-
+ 
+  // try to grab the playlist for this level
   var req = new XMLHttpRequest();
   req.open("GET", `${config.streamURI}/${config.playlist}_${levelName}/index.m3u8`);
   req.addEventListener("load", function() {
     if (this.status !== 200) { 
-      console.warn("level not avail"); 
       setTimeout(waitForLevel(levelIdx), 1000); 
       return; 
     }
 
+    // if we got a playlist, scan it for segments
+    var numSegments = this.responseText.match(/\#EXTINF.*/g).length;
+    if (numSegments < 2) {
+      setTimeout(waitForLevel(levelIdx), 250); 
+      return;
+    }
+
+    // if we have at least 2 segments this level is healthy
     streamHealth[levelIdx] = true;
   });
   req.send();
