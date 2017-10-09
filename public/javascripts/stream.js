@@ -54,10 +54,10 @@ var myVideoPlayer = {
     this.player.play();
   }
 };
-myVideoPlayer.play();
-setInterval(function() {
-  myVideoPlayer.healthCheck();
-}, myVideoPlayer.checkInterval * 1000);
+// myVideoPlayer.play();
+// setInterval(function() {
+//   myVideoPlayer.healthCheck();
+// }, myVideoPlayer.checkInterval * 1000);
 
 videojs('my-video').ready(function() {
   var myPlayer    = this;

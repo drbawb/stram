@@ -4,6 +4,10 @@
     <input id="alleluia-connect-id" type="hidden" value=<%= session[:twitch_id] %> />
   </form>
 
+  <div id="alleluia-stale" class="hidden">
+    You are viewing old messages, scroll down to see the latest ...
+  </div>
+
   <div id="alleluia-messages"></div>
 
   <div class="wrap">

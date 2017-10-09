@@ -2,7 +2,7 @@ console.log("starting text-mode client");
 $(document).ready(function() {
     var client  = require('./chat/events.js'); // TODO: really, really bad module name.
 
-  var uidToTwitchId = {};
+  var uidToTwitchId  = {};
 
   var flair = {
     "mods":          { style: "mods",     members: ["76912664", "166713997"] },
@@ -30,6 +30,7 @@ $(document).ready(function() {
     movieBox: $(".movie-box"),
     
     // chat input
+    stale:     $("#alleluia-stale"),
     messages:  $("#alleluia-messages"),
     inputBox:  $("#alleluia-input"),
     emoteBtn:  $("#alleluia-emotes"),
@@ -95,13 +96,24 @@ $(document).ready(function() {
     msg.appendTo(line);
     line.appendTo(ui.messages);
 
-    ui.messages[0].scrollTop = ui.messages[0].scrollHeight;
+    scrollIfNecessary(line);
   };
 
   var printUsers = function() {
     for (var key in userList) {
       appendMessage("sys", "System", userList[key]);
     }
+  };
+
+  var scrollIfNecessary = function(el) {
+    var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
+    if (ui.messages[0].scrollTop < (maxScrollHeight - el[0].clientHeight)) { 
+      ui.stale.removeClass("hidden");
+      return; 
+    }
+
+    ui.stale.addClass("hidden");
+    el[0].scrollIntoView();
   };
 
   // bootstrap client
@@ -172,6 +184,11 @@ $(document).ready(function() {
     if (evt.keyCode === 27) { // press escape
       ui.emoteBox.addClass("hidden");
     }
+  });
+
+  ui.messages.on("scroll", function(evt) {
+    var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
+    if (ui.messages[0].scrollTop >= maxScrollHeight) { ui.stale.addClass("hidden"); }
   });
 
   // populate the emote menu

@@ -356,6 +356,7 @@
         movieBox: $(".movie-box"),
 
         // chat input
+        stale: $("#alleluia-stale"),
         messages: $("#alleluia-messages"),
         inputBox: $("#alleluia-input"),
         emoteBtn: $("#alleluia-emotes"),
@@ -419,13 +420,24 @@
         msg.appendTo(line);
         line.appendTo(ui.messages);
 
-        ui.messages[0].scrollTop = ui.messages[0].scrollHeight;
+        scrollIfNecessary(line);
       };
 
       var printUsers = function printUsers() {
         for (var key in userList) {
           appendMessage("sys", "System", userList[key]);
         }
+      };
+
+      var scrollIfNecessary = function scrollIfNecessary(el) {
+        var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
+        if (ui.messages[0].scrollTop < maxScrollHeight - el[0].clientHeight) {
+          ui.stale.removeClass("hidden");
+          return;
+        }
+
+        ui.stale.addClass("hidden");
+        el[0].scrollIntoView();
       };
 
       // bootstrap client
@@ -499,6 +511,13 @@
         if (evt.keyCode === 27) {
           // press escape
           ui.emoteBox.addClass("hidden");
+        }
+      });
+
+      ui.messages.on("scroll", function (evt) {
+        var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
+        if (ui.messages[0].scrollTop >= maxScrollHeight) {
+          ui.stale.addClass("hidden");
         }
       });
 
