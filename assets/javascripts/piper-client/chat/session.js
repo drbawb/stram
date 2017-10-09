@@ -57,6 +57,7 @@ module.exports = (function() {
 	};
 
   me.sendMessage = function(msg) {
+    if (msg === "") { console.warn("cowardly refusing to send blank message"); return; }
     // handle chat message
     ws.send(JSON.stringify(Nirvash.chatMessage(
           roomname,

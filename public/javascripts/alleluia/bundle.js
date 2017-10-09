@@ -165,6 +165,9 @@
       };
 
       me.sendMessage = function (msg) {
+        if (msg === "") {
+          console.warn("cowardly refusing to send blank message");return;
+        }
         // handle chat message
         ws.send(JSON.stringify(Nirvash.chatMessage(roomname, username, msg)));
       };
@@ -490,7 +493,6 @@
               printUsers();return;
           };
 
-          console.log("sending: " + msg);
           client.sendMessage(msg);
         };
       });

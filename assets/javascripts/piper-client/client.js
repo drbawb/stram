@@ -163,7 +163,6 @@ $(document).ready(function() {
           printUsers(); return;
       };
 
-      console.log("sending: " + msg);
       client.sendMessage(msg);     
     };
   });
