@@ -525,7 +525,7 @@
       });
 
       ui.messages.on("scroll", function (evt) {
-        var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
+        var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].offsetHeight;
         if (ui.messages[0].scrollTop >= maxScrollHeight) {
           ui.stale.addClass("hidden");
         }
