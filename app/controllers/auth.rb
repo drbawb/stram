@@ -4,8 +4,7 @@ TWITCH_REDIRECT_URI="http://valestream.fatalsyntax.com/auth/twitch/callback"
 
 Stram::App.controllers :auth do
   get :logout do
-    session[:is_auth] = false
-    session[:is_subscriber] = false
+    clear_session()
     redirect url_for(:dash, :vjs)
   end
 

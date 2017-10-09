@@ -12,6 +12,10 @@ module Stram
                            token_url: "/kraken/oauth2/token")
       end
 
+      def clear_session
+        session[:is_auth] = false
+        session[:is_subscriber] = false
+      end
 
       def refresh_session
         if Time.now > session[:twitch_expires]
@@ -26,14 +30,19 @@ module Stram
           }
 
           # get an authorization token
-          auth_uri = URI::HTTPS.build(host: "api.twitch.tv",
-                                      path: "/kraken/oauth2/token")
-
-          response = HTTP.post(auth_uri, params: login_opts)
-          logger.debug response.body
-          token    = JSON.parse(response.body)
-          logger.debug "got twitch token :: #{token.to_s}"
-          session[:twitch_token] = token
+          begin 
+            auth_uri = URI::HTTPS.build(host: "api.twitch.tv",
+                                        path: "/kraken/oauth2/token")
+            
+            response = HTTP.post(auth_uri, params: login_opts)
+            logger.debug response.body
+            token    = JSON.parse(response.body)
+            logger.debug "got twitch token :: #{token.to_s}"
+            session[:twitch_token] = token
+          rescue JSON::ParserError => err
+            logger.warn "error w/ refresh token response: #{err}"
+            clear_session()
+          end
         end
       end
       
