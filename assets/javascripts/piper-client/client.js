@@ -115,7 +115,8 @@ $(document).ready(function() {
 
   var scrollIfNecessary = function(el) {
     var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
-    if (ui.messages[0].scrollTop < (maxScrollHeight - el[0].clientHeight)) { 
+    var clampedHeight = Math.max(0, (maxScrollHeight - el[0].clientHeight));
+    if (Math.ceil(ui.messages[0].scrollTop) < clampedHeight) {
       ui.stale.removeClass("hidden");
       return; 
     }
@@ -194,8 +195,9 @@ $(document).ready(function() {
   });
 
   ui.messages.on("scroll", function(evt) {
-    var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].offsetHeight;
-    if (ui.messages[0].scrollTop >= maxScrollHeight) { ui.stale.addClass("hidden"); }
+    var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
+    var roundedTop = Math.ceil(ui.messages[0].scrollTop);
+    if (roundedTop >= maxScrollHeight) { ui.stale.addClass("hidden"); }
   });
 
   // populate the emote menu

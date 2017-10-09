@@ -442,7 +442,8 @@
 
       var scrollIfNecessary = function scrollIfNecessary(el) {
         var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
-        if (ui.messages[0].scrollTop < maxScrollHeight - el[0].clientHeight) {
+        var clampedHeight = Math.max(0, maxScrollHeight - el[0].clientHeight);
+        if (Math.ceil(ui.messages[0].scrollTop) < clampedHeight) {
           ui.stale.removeClass("hidden");
           return;
         }
@@ -525,8 +526,9 @@
       });
 
       ui.messages.on("scroll", function (evt) {
-        var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].offsetHeight;
-        if (ui.messages[0].scrollTop >= maxScrollHeight) {
+        var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
+        var roundedTop = Math.ceil(ui.messages[0].scrollTop);
+        if (roundedTop >= maxScrollHeight) {
           ui.stale.addClass("hidden");
         }
       });
