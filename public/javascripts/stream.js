@@ -38,8 +38,8 @@ var proceedWhenReady = function() {
   }
 
   if (!allReady) { setTimeout(proceedWhenReady, 500); return; }
-
   console.log("here we go ...");
+
   let player = videojs('my-video');
   player.src({
     src: `${config.streamURI}/${config.playlist}.m3u8`,
@@ -59,7 +59,7 @@ var waitForLevel = function(levelIdx) {
   req.addEventListener("load", function() {
     if (this.status !== 200) { 
       console.warn("level not avail"); 
-      setTimeout(waitForLevel(levelIdx), 500); 
+      setTimeout(waitForLevel(levelIdx), 1000); 
       return; 
     }
 
