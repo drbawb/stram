@@ -115,10 +115,15 @@ a:visited {
   font-size: 16px;
 }
 
+.alleluia-line-boogie > span.alleluia-name {
+  font-family: 'Eater';
+}
+
 .alleluia-line-vale > span.alleluia-name  { color: #efff32; }
 .alleluia-line-hime > span.alleluia-name  { color: #14ffbd; }
 .alleluia-line-mods > span.alleluia-name  { color: #ff5733; }
 .alleluia-line-juice > span.alleluia-name { color: #ff33cc; }
+
 
 div.vjs-error-display.vjs-modal-dialog { display: none; }
 
