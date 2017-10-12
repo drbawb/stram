@@ -66,7 +66,7 @@ var searchForStream = function() {
   if (streamFound) { return; }
 
   // first check if the stream descriptor is available
-  var req = new XMLHttpRequest();
+  let req = new XMLHttpRequest();
   req.open("GET", `${config.streamURI}/${config.playlist}.m3u8`);
   req.addEventListener("load", function() {
     if (this.status !== 200) { console.warn("stream not avail: " + this.status); return; }
@@ -82,7 +82,10 @@ var searchForStream = function() {
 var streamHealth = []
 var testStreamHealth = function() {
   // create ready flags
-  for (let i = 0; i < config.levels.length; i++) { streamHealth[i] = false; waitForLevel(i); }
+  for (let i = 0; i < config.levels.length; i++) { 
+    streamHealth[i] = false; 
+    waitForLevel(i);
+  }
   proceedWhenReady();
 };
 
@@ -111,18 +114,20 @@ var waitForLevel = function(levelIdx) {
   let levelName = config.levels[levelIdx];
  
   // try to grab the playlist for this level
-  var req = new XMLHttpRequest();
+  let req = new XMLHttpRequest();
   req.open("GET", `${config.streamURI}/${config.playlist}_${levelName}/index.m3u8`);
   req.addEventListener("load", function() {
     if (this.status !== 200) { 
-      setTimeout(waitForLevel(levelIdx), 1000); 
+      console.warn("waiting, no playlist");
+      setTimeout(function() { waitForLevel(levelIdx) }, 250); 
       return; 
     }
 
     // if we got a playlist, scan it for segments
-    var numSegments = this.responseText.match(/\#EXTINF.*/g).length;
+    let numSegments = this.responseText.match(/\#EXTINF.*/g).length;
     if (numSegments < config.MIN_SEGMENTS) {
-      setTimeout(waitForLevel(levelIdx), 250); 
+      console.warn("waiting, not enough segments");
+      setTimeout(function() { waitForLevel(levelIdx) }, 1000);
       return;
     }
 
