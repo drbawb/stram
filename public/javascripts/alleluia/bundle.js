@@ -332,6 +332,7 @@
       var uidToTwitchId = {};
 
       var flair = {
+        "boogie": { style: "boogie", members: ["160400130"] },
         "mods": { style: "mods", members: ["76912664", "166713997"] },
         "hime": { style: "hime", members: ["47735570"] },
         "vale": { style: "vale", members: ["27645199"] },
