@@ -1,8 +1,63 @@
+// word is the bird
+videojs.registerPlugin("qualityMenu", function(opts) {
+  // destroy old menu
+
+  // add the menu
+  let menuButton = document.createElement("div");
+  menuButton.classList.add("vjs-quality-menu");
+
+  let label = document.createElement("span");
+  label.innerHTML = "QUALITY";
+  menuButton.appendChild(label);
+
+  let menu = document.createElement("div");
+  menu.classList.add("vjs-quality-menu-list"); 
+  menuButton.appendChild(menu);
+
+  menuButton.addEventListener("click", function(evt) {
+    menu.classList.toggle("visible");
+  });
+
+
+  let vjsControls = this.el_.querySelector(".vjs-control-bar");
+  let oldMenu     = vjsControls.querySelector(".vjs-quality-menu");
+
+  if (oldMenu) { vjsControls.removeChild(oldMenu); }
+  vjsControls.appendChild(menuButton);
+
+  let foundLevels = [];
+  let qualityLevels = this.qualityLevels();
+  qualityLevels.on("addqualitylevel", function(evt) {
+    console.log(evt);
+    let level = evt.qualityLevel;
+    foundLevels.push(level);
+    
+    let levelButton = document.createElement("div");
+    levelButton.classList.add("vjs-quality-menu-level");
+    levelButton.innerHTML = evt.qualityLevel.label; // TODO: friendly name
+    menu.appendChild(levelButton);
+
+    levelButton.addEventListener("click", function(evt) {
+      level.enabled = true;
+
+      for (var idx in foundLevels) {
+        let entry = foundLevels[idx];
+        if (entry !== level) { entry.enabled = false; }
+      }
+    });
+  });
+});
+
+
 // hot new shit...
 var config = {
+  // stream info
   streamURI: "//seraphina.fatalsyntax.com:9001/hls",
   playlist:  "test",
   levels:    ["low", "mid", "src"],
+
+  // no tricks, no gimmicks
+  MIN_SEGMENTS: 3,
 };
 
 // /hls/test_mid/index.m3u8
@@ -46,6 +101,8 @@ var proceedWhenReady = function() {
     type: 'application/x-mpegURL',
     withCredentials: false
   });
+
+  let qualityMenu = player.qualityMenu();
   player.play();
   installErrorTrap();
 };
@@ -64,7 +121,7 @@ var waitForLevel = function(levelIdx) {
 
     // if we got a playlist, scan it for segments
     var numSegments = this.responseText.match(/\#EXTINF.*/g).length;
-    if (numSegments < 2) {
+    if (numSegments < config.MIN_SEGMENTS) {
       setTimeout(waitForLevel(levelIdx), 250); 
       return;
     }
