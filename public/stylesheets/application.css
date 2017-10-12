@@ -139,12 +139,16 @@ a:visited {
 /* videojs */
 div.vjs-error-display.vjs-modal-dialog { display: none; }
 
-div.vjs-quality-menu { font-weight: bold; }
+div.vjs-quality-menu { font-weight: bold; line-height: 30px;}
 div.vjs-quality-menu-list { display: none; }
-div.vjs-quality-menu-list.visible { display: initial; }
+div.vjs-quality-menu-list.visible { 
+  display: block; 
+  background-color: #000000;
+  transform: translateY(calc(-100% - 30px));
+}
+
+div.vjs-quality-menu-level {}
 div.vjs-quality-menu-level:hover { background-color: #bababa; }
-
-
 
 @media only screen and (min-width: 640px) {
   .container {
