@@ -1,133 +1,158 @@
-// word is the bird
-videojs.registerPlugin("qualityMenu", function(opts) {
-  // destroy old menu
-
-  // add the menu
-  let menuButton = document.createElement("div");
-  menuButton.classList.add("vjs-quality-menu");
-
-  let label = document.createElement("span");
-  label.innerHTML = "QUALITY";
-  menuButton.appendChild(label);
-
-  let menu = document.createElement("div");
-  menu.classList.add("vjs-quality-menu-list"); 
-  menuButton.appendChild(menu);
-
-  menuButton.addEventListener("click", function(evt) {
-    menu.classList.toggle("visible");
-  });
-
-
-  let vjsControls = this.el_.querySelector(".vjs-control-bar");
-  let oldMenu     = vjsControls.querySelector(".vjs-quality-menu");
-
-  if (oldMenu) { vjsControls.removeChild(oldMenu); }
-  vjsControls.appendChild(menuButton);
-
-  let foundLevels = [];
-  let qualityLevels = this.qualityLevels();
-  qualityLevels.on("addqualitylevel", function(evt) {
-    console.log(evt);
-    let level = evt.qualityLevel;
-    foundLevels.push(level);
-    
-    let levelButton = document.createElement("div");
-    levelButton.classList.add("vjs-quality-menu-level");
-    levelButton.innerHTML = evt.qualityLevel.label; // TODO: friendly name
-    menu.appendChild(levelButton);
-
-    levelButton.addEventListener("click", function(evt) {
-      level.enabled = true;
-
-      for (var idx in foundLevels) {
-        let entry = foundLevels[idx];
-        if (entry !== level) { entry.enabled = false; }
-      }
-    });
-  });
-});
-
+"use strict";
 
 // hot new shit...
 var config = {
   // stream info
   streamURI: "//seraphina.fatalsyntax.com:9001/hls",
-  playlist:  "test",
-  levels:    ["low", "mid", "src"],
+  playlist: "test",
+  levels: ["low", "mid", "src"],
+  friendly: ["Low (768K)", "Medium (2M)", "High (4M)"],
 
   // no tricks, no gimmicks
-  MIN_SEGMENTS: 3,
+  MIN_SEGMENTS: 3
 };
+
+videojs.registerPlugin("qualityMenu", function (opts) {
+  // add the menu
+  var menuButton = document.createElement("div");
+  menuButton.classList.add("vjs-quality-menu");
+
+  // label the button
+  var label = document.createElement("span");
+  label.innerHTML = "QUALITY";
+  menuButton.appendChild(label);
+
+  // add container for list options
+  var menu = document.createElement("div");
+  menu.classList.add("vjs-quality-menu-list");
+  menuButton.appendChild(menu);
+
+  // toggle visibility of the list
+  menuButton.addEventListener("click", function (evt) {
+    menu.classList.toggle("visible");
+  });
+
+  // add menu to vjs controls panel
+  var vjsControls = this.el_.querySelector(".vjs-control-bar");
+  var oldMenu = vjsControls.querySelector(".vjs-quality-menu");
+
+  if (oldMenu) {
+    vjsControls.removeChild(oldMenu);
+  }
+  vjsControls.appendChild(menuButton);
+
+  // build mapping of friendly names
+  var friendlyNames = {};
+  for (var idx in config.levels) {
+    var levelName = config.playlist + "_" + config.levels[idx] + "/index.m3u8";
+    friendlyNames[levelName] = config.friendly[idx];
+  }
+
+  // handle quality level events
+  var foundLevels = [];
+  var qualityLevels = this.qualityLevels();
+  qualityLevels.on("addqualitylevel", function (evt) {
+    console.log(evt);
+    var level = evt.qualityLevel;
+    foundLevels.push(level);
+
+    var levelButton = document.createElement("div");
+    levelButton.classList.add("vjs-quality-menu-level");
+    levelButton.innerHTML = friendlyNames[evt.qualityLevel.label];
+    menu.appendChild(levelButton);
+
+    levelButton.addEventListener("click", function (evt) {
+      level.enabled = true;
+
+      for (var idx in foundLevels) {
+        var entry = foundLevels[idx];
+        if (entry !== level) {
+          entry.enabled = false;
+        }
+      }
+    });
+  });
+});
 
 // /hls/test_mid/index.m3u8
 var streamFound = false;
-var searchForStream = function() {
-  if (streamFound) { return; }
+var searchForStream = function searchForStream() {
+  if (streamFound) {
+    return;
+  }
 
   // first check if the stream descriptor is available
-  let req = new XMLHttpRequest();
-  req.open("GET", `${config.streamURI}/${config.playlist}.m3u8`);
-  req.addEventListener("load", function() {
-    if (this.status !== 200) { console.warn("stream not avail: " + this.status); return; }
+  var req = new XMLHttpRequest();
+  req.open("GET", config.streamURI + "/" + config.playlist + ".m3u8");
+  req.addEventListener("load", function () {
+    if (this.status !== 200) {
+      console.warn("stream not avail: " + this.status);return;
+    }
     streamFound = true;
     testStreamHealth();
   });
   req.send();
 
-
   setTimeout(searchForStream, 1000);
 };
 
-var streamHealth = []
-var testStreamHealth = function() {
+var streamHealth = [];
+var testStreamHealth = function testStreamHealth() {
   // create ready flags
-  for (let i = 0; i < config.levels.length; i++) { 
-    streamHealth[i] = false; 
+  for (var i = 0; i < config.levels.length; i++) {
+    streamHealth[i] = false;
     waitForLevel(i);
   }
   proceedWhenReady();
 };
 
-var proceedWhenReady = function() {
+var proceedWhenReady = function proceedWhenReady() {
   var allReady = true;
-  for (let i = 0; i < streamHealth.length; i++) {
-    if (!streamHealth[i]) { console.warn(`level ${config.levels[i]} not ready`); allReady = false; }
+  for (var i = 0; i < streamHealth.length; i++) {
+    if (!streamHealth[i]) {
+      console.warn("level " + config.levels[i] + " not ready");allReady = false;
+    }
   }
 
-  if (!allReady) { setTimeout(proceedWhenReady, 500); return; }
+  if (!allReady) {
+    setTimeout(proceedWhenReady, 500);return;
+  }
   console.log("here we go ...");
 
-  let player = videojs('my-video');
+  var player = videojs('my-video');
   player.src({
-    src: `${config.streamURI}/${config.playlist}.m3u8`,
+    src: config.streamURI + "/" + config.playlist + ".m3u8",
     type: 'application/x-mpegURL',
     withCredentials: false
   });
 
-  let qualityMenu = player.qualityMenu();
+  var qualityMenu = player.qualityMenu();
   player.play();
   installErrorTrap();
 };
 
-var waitForLevel = function(levelIdx) {
-  let levelName = config.levels[levelIdx];
- 
+var waitForLevel = function waitForLevel(levelIdx) {
+  var levelName = config.levels[levelIdx];
+
   // try to grab the playlist for this level
-  let req = new XMLHttpRequest();
-  req.open("GET", `${config.streamURI}/${config.playlist}_${levelName}/index.m3u8`);
-  req.addEventListener("load", function() {
-    if (this.status !== 200) { 
+  var req = new XMLHttpRequest();
+  req.open("GET", config.streamURI + "/" + config.playlist + "_" + levelName + "/index.m3u8");
+  req.addEventListener("load", function () {
+    if (this.status !== 200) {
       console.warn("waiting, no playlist");
-      setTimeout(function() { waitForLevel(levelIdx) }, 250); 
-      return; 
+      setTimeout(function () {
+        waitForLevel(levelIdx);
+      }, 250);
+      return;
     }
 
     // if we got a playlist, scan it for segments
-    let numSegments = this.responseText.match(/\#EXTINF.*/g).length;
+    var numSegments = this.responseText.match(/\#EXTINF.*/g).length;
     if (numSegments < config.MIN_SEGMENTS) {
       console.warn("waiting, not enough segments");
-      setTimeout(function() { waitForLevel(levelIdx) }, 1000);
+      setTimeout(function () {
+        waitForLevel(levelIdx);
+      }, 1000);
       return;
     }
 
@@ -138,21 +163,25 @@ var waitForLevel = function(levelIdx) {
 };
 
 var notReady = 0;
-var installErrorTrap = function() {
-  let player = videojs('my-video');
-  let error  = player.error();
-  let ready  = player.readyState();
+var installErrorTrap = function installErrorTrap() {
+  var player = videojs('my-video');
+  var error = player.error();
+  var ready = player.readyState();
 
-  if (ready < 4) { notReady++; }
-  if (ready === 4) { notReady = 0; }
+  if (ready < 4) {
+    notReady++;
+  }
+  if (ready === 4) {
+    notReady = 0;
+  }
 
-  if (error || (notReady > 10)) {
+  if (error || notReady > 10) {
     console.warn("not ready: " + notReady);
     console.warn(error);
 
     // reinit the player to get BRB screen
     player.src({
-      src: `${config.streamURI}/${config.playlist}.m3u8`,
+      src: config.streamURI + "/" + config.playlist + ".m3u8",
       type: 'application/x-mpegURL',
       withCredentials: false
     });
@@ -170,9 +199,9 @@ var installErrorTrap = function() {
 
 searchForStream();
 
-videojs('my-video').ready(function() {
-  var myPlayer    = this;
-  var aspectRatio = 9/16; // TODO: read from video?
+videojs('my-video').ready(function () {
+  var myPlayer = this;
+  var aspectRatio = 9 / 16; // TODO: read from video?
   function resizeFrame() {
     var width = document.getElementById(myPlayer.id()).parentElement.offsetWidth;
     myPlayer.width(width);
