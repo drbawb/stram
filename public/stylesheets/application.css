@@ -37,6 +37,18 @@ a:visited {
 
 .chat-box > .wrap { margin-top: auto; }
 
+.center-box {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-message {
+  background-color: rgba(58, 96, 165, 0.33);
+  padding: 10px;
+}
+
 .btn {
   display: inline-block;
   font-weight: bold;
