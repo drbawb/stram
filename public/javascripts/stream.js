@@ -128,6 +128,7 @@ var proceedWhenReady = function proceedWhenReady() {
 
   var qualityMenu = player.qualityMenu();
   player.play();
+  installIndexTrap();
   installErrorTrap();
 };
 
@@ -162,6 +163,20 @@ var waitForLevel = function waitForLevel(levelIdx) {
   req.send();
 };
 
+var indexMissing = false;
+var installIndexTrap = function() {
+  // check if the stream index is missing
+  var req = new XMLHttpRequest();
+  req.open("GET", config.streamURI + "/" + config.playlist + ".m3u8");
+  req.addEventListener("load", function () {
+    indexMissing = (this.status !== 200);
+    if (indexMissing) { console.warn("stream not avail: " + this.status); return; }
+  });
+  req.send();
+
+  setTimeout(installIndexTrap, 10000);
+};
+
 var notReady = 0;
 var installErrorTrap = function installErrorTrap() {
   var player = videojs('my-video');
@@ -175,7 +190,7 @@ var installErrorTrap = function installErrorTrap() {
     notReady = 0;
   }
 
-  if (error || notReady > 10) {
+  if (indexMissing || error || notReady > 20) {
     console.warn("not ready: " + notReady);
     console.warn(error);
 
