@@ -258,4 +258,5 @@ var installErrorTrap = function installErrorTrap() {
   setTimeout(installErrorTrap, 1000);
 };
 
+resetPlayer("my-video");
 searchForStream();
