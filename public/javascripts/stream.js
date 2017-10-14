@@ -127,9 +127,11 @@ var proceedWhenReady = function proceedWhenReady() {
   });
 
   var qualityMenu = player.qualityMenu();
-  player.play();
-  installIndexTrap();
-  installErrorTrap();
+  player.ready(function() {
+    player.play();
+    installIndexTrap();
+    installErrorTrap();
+  });
 };
 
 var waitForLevel = function waitForLevel(levelIdx) {
@@ -168,13 +170,14 @@ var installIndexTrap = function() {
   // check if the stream index is missing
   var req = new XMLHttpRequest();
   req.open("GET", config.streamURI + "/" + config.playlist + ".m3u8");
+  
   req.addEventListener("load", function () {
     indexMissing = (this.status !== 200);
     if (indexMissing) { console.warn("stream not avail: " + this.status); return; }
+    setTimeout(installIndexTrap, 10000);
   });
-  req.send();
 
-  setTimeout(installIndexTrap, 10000);
+  req.send();
 };
 
 var notReady = 0;
