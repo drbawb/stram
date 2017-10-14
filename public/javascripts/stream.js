@@ -9,7 +9,9 @@ var config = {
   friendly: ["Low (768K)", "Medium (2M)", "High (4M)"],
 
   // no tricks, no gimmicks
-  MIN_SEGMENTS: 3
+  MIN_SEGMENTS: 3,
+  NOT_READY_SEC: 30,
+  NOT_INDEX_SEC: 15,
 };
 
 videojs.registerPlugin("qualityMenu", function (opts) {
@@ -180,20 +182,23 @@ var installIndexTrap = function() {
   req.send();
 };
 
+var notIndex = 0;
 var notReady = 0;
 var installErrorTrap = function installErrorTrap() {
   var player = videojs('my-video');
   var error = player.error();
   var ready = player.readyState();
 
-  if (ready < 4) {
-    notReady++;
-  }
-  if (ready === 4) {
-    notReady = 0;
-  }
+  // count seconds index is missing
+  if (indexMissing) { notIndex++;   }
+  else              { notIndex = 0; }
 
-  if (indexMissing || error || notReady > 20) {
+  // count seconds stream is unable to buffer
+  if (ready < 4) { notReady++; }
+  if (ready === 4) { notReady = 0; }
+
+
+  if (error || (notIndex > config.NOT_INDEX_SEC) || (notReady > config.NOT_READY_SEC)) {
     console.warn("not ready: " + notReady);
     console.warn(error);
 
