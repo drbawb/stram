@@ -76,6 +76,44 @@ videojs.registerPlugin("qualityMenu", function (opts) {
   });
 });
 
+var resetPlayer = function(id) {
+  // get rid of old palyer
+  videojs(id).dispose();
+
+  // clone video tag for the new one
+  var newPlayer = document.createElement("video");
+  newPlayer.id = "my-video";
+  newPlayer.classList.add("video-js");
+  newPlayer.setAttribute("playsinline", null);
+  newPlayer.setAttribute("controls", null);
+  newPlayer.setAttribute("preload", "auto");
+  newPlayer.setAttribute("poster", "/images/brb.png");
+  newPlayer.dataset.setup = "{}";
+
+  document.querySelector(".movie-box").appendChild(newPlayer);
+
+  // reinit video aspect correction
+  videojs('my-video').ready(function () {
+    var myPlayer = this;
+    var aspectRatio = 9 / 16; // TODO: read from video?
+    function resizeFrame() {
+      var width = document.getElementById(myPlayer.id()).parentElement.offsetWidth;
+      myPlayer.width(width);
+      myPlayer.height(width * aspectRatio);
+    }
+
+    resizeFrame();
+    window.onresize = resizeFrame;
+  });
+
+  // init the source
+  videojs(id).src({
+    src: config.streamURI + "/" + config.playlist + ".m3u8",
+    type: 'application/x-mpegURL',
+    withCredentials: false
+  });
+}
+
 // /hls/test_mid/index.m3u8
 var streamFound = false;
 var searchForStream = function searchForStream() {
@@ -119,20 +157,22 @@ var proceedWhenReady = function proceedWhenReady() {
   if (!allReady) {
     setTimeout(proceedWhenReady, 500);return;
   }
-  console.log("here we go ...");
 
-  var player = videojs('my-video');
+  console.log("here we go ...");
+  resetPlayer("my-video");
+
+  var player = videojs("my-video");
   player.src({
     src: config.streamURI + "/" + config.playlist + ".m3u8",
     type: 'application/x-mpegURL',
     withCredentials: false
   });
 
-  var qualityMenu = player.qualityMenu();
   player.ready(function() {
-    player.play();
+    var quality = player.qualityMenu();
     installIndexTrap();
     installErrorTrap();
+    player.play();
   });
 };
 
@@ -203,14 +243,12 @@ var installErrorTrap = function installErrorTrap() {
     console.warn(error);
 
     // reinit the player to get BRB screen
-    player.src({
-      src: config.streamURI + "/" + config.playlist + ".m3u8",
-      type: 'application/x-mpegURL',
-      withCredentials: false
-    });
-
+    resetPlayer("my-video");
+    
     // start looking for stream again
-    notReady = 0;
+    // TODO: move these status flags into a struct
+    notReady    = 0;
+    notIndex    = 0;
     streamFound = false;
     searchForStream();
 
@@ -221,16 +259,3 @@ var installErrorTrap = function installErrorTrap() {
 };
 
 searchForStream();
-
-videojs('my-video').ready(function () {
-  var myPlayer = this;
-  var aspectRatio = 9 / 16; // TODO: read from video?
-  function resizeFrame() {
-    var width = document.getElementById(myPlayer.id()).parentElement.offsetWidth;
-    myPlayer.width(width);
-    myPlayer.height(width * aspectRatio);
-  }
-
-  resizeFrame();
-  window.onresize = resizeFrame;
-});
