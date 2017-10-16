@@ -421,6 +421,11 @@
       };
 
       var appendMessage = function appendMessage(type, name, msg) {
+        // check now if the user has scrolled, before we append the message
+        var vpHeight = ui.messages[0].scrollHeight - ui.messages[0].scrollTop;
+        var realHeight = ui.messages[0].getBoundingClientRect().height;
+        var isUserScrolled = vpHeight != realHeight;
+
         var line = $("<div>").addClass("alleluia-line").addClass("alleluia-line-" + type);
 
         msg = scanForEmotes(msg);
@@ -431,25 +436,18 @@
         msg.appendTo(line);
         line.appendTo(ui.messages);
 
-        scrollIfNecessary(line);
+        if (isUserScrolled) {
+          ui.stale.removeClass("hidden");
+        } else {
+          ui.stale.addClass("hidden");
+          line[0].scrollIntoView();
+        }
       };
 
       var printUsers = function printUsers() {
         for (var key in userList) {
           appendMessage("sys", "System", userList[key]);
         }
-      };
-
-      var scrollIfNecessary = function scrollIfNecessary(el) {
-        var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
-        var clampedHeight = Math.max(0, maxScrollHeight - el[0].clientHeight);
-        if (Math.ceil(ui.messages[0].scrollTop) < clampedHeight) {
-          ui.stale.removeClass("hidden");
-          return;
-        }
-
-        ui.stale.addClass("hidden");
-        el[0].scrollIntoView();
       };
 
       // bootstrap client
