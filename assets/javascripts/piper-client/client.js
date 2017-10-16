@@ -91,11 +91,14 @@ $(document).ready(function() {
               .replace(/>/g, "&gt;");
   }
 
+  // returns true if the element is at the bottom of its travel
+  var isElementAtBottom = function(el) {
+    return (el.scrollHeight - el.scrollTop - el.clientHeight) < 1;
+  }
+
   var appendMessage = function(type, name, msg) {
     // check now if the user has scrolled, before we append the message
-    var vpHeight   = (ui.messages[0].scrollHeight - ui.messages[0].scrollTop);
-    var realHeight = ui.messages[0].getBoundingClientRect().height;
-    var isUserScrolled = vpHeight != realHeight;
+    var isUserScrolled = !isElementAtBottom(ui.messages[0]);
 
     var line = $("<div>")
       .addClass("alleluia-line")
@@ -193,9 +196,7 @@ $(document).ready(function() {
   });
 
   ui.messages.on("scroll", function(evt) {
-    var maxScrollHeight = ui.messages[0].scrollHeight - ui.messages[0].clientHeight;
-    var roundedTop = Math.ceil(ui.messages[0].scrollTop);
-    if (roundedTop >= maxScrollHeight) { ui.stale.addClass("hidden"); }
+    if (isElementAtBottom(ui.messages[0])) { ui.stale.addClass("hidden"); }
   });
 
   // populate the emote menu
