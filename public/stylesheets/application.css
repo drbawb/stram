@@ -127,14 +127,10 @@ a:visited {
   font-size: 16px;
 }
 
-.alleluia-line-boogie > span.alleluia-name {
-  font-family: 'Eater';
-}
-
-.alleluia-line-vale > span.alleluia-name  { color: #efff32; }
-.alleluia-line-hime > span.alleluia-name  { color: #14ffbd; }
-.alleluia-line-mods > span.alleluia-name  { color: #00ced1; }
-.alleluia-line-juice > span.alleluia-name { color: #ff33cc; }
+.alleluia-line-vale > span.alleluia-name  { color: #efff32; font-family: 'Eater'; }
+.alleluia-line-hime > span.alleluia-name  { color: #14ffbd; font-family: 'Eater'; }
+.alleluia-line-mods > span.alleluia-name  { color: #00ced1; font-family: 'Eater'; }
+.alleluia-line-juice > span.alleluia-name { color: #ff33cc; font-family: 'Eater'; }
 
 /* videojs */
 div.vjs-error-display.vjs-modal-dialog { display: none; }

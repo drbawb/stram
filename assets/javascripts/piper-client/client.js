@@ -5,8 +5,7 @@ $(document).ready(function() {
   var uidToTwitchId  = {};
 
   var flair = {
-    "boogie":        { style: "boogie",   members: ["160400130"] },
-    "mods":          { style: "mods",     members: ["76912664", "166713997"] },
+    "mods":          { style: "mods",     members: ["160400130", "53623670", "76912664", "166713997"] },
     "hime":          { style: "hime",     members: ["47735570"]              },
     "vale":          { style: "vale",     members: ["27645199"]              },
     "juice":         { style: "juice",    members: ["100783701"]             },
