@@ -94,7 +94,8 @@ $(document).ready(function() {
 
   // returns true if the element is at the bottom of its travel
   var isElementAtBottom = function(el) {
-    return (el.scrollHeight - el.scrollTop - el.clientHeight) < 1;
+    let ans = (el.scrollHeight - el.scrollTop - el.clientHeight);
+    return ans <= 1;
   }
 
   var appendMessage = function(type, name, msg) {
