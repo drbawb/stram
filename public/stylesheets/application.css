@@ -112,6 +112,7 @@ a:visited {
 .alleluia-line > span.alleluia-name { 
   margin-right: 10px;
   font-weight: bold; 
+  color: #ffffff;
 }
 
 .alleluia-line-sys {
@@ -120,17 +121,20 @@ a:visited {
 }
 
 /* flair stuff */
+
 .alleluia-line-overlord > span.alleluia-name {
-  color: #d29af8;
+  color: #593695;
   font-family: 'Libre Barcode 39 Extended', sans-serif;
   font-weight: normal;
   font-size: 16px;
 }
 
-.alleluia-line-vale > span.alleluia-name  { color: #efff32; font-family: 'Eater'; }
-.alleluia-line-hime > span.alleluia-name  { color: #14ffbd; font-family: 'Eater'; }
-.alleluia-line-mods > span.alleluia-name  { color: #00ced1; font-family: 'Eater'; }
-.alleluia-line-juice > span.alleluia-name { color: #ff33cc; font-family: 'Eater'; }
+.alleluia-line-vale  > span.alleluia-name { color: #efff32; font-family: 'Eater'; }
+.alleluia-line-jacca > span.alleluia-name { color: #ff69ca; font-family: 'Eater'; }
+.alleluia-line-hime  > span.alleluia-name { color: #14ffbd; font-family: 'Share Tech Mono', monospace; }
+.alleluia-line-mods  > span.alleluia-name { color: #00ced1; font-family: 'Eater'; }
+.alleluia-line-juice > span.alleluia-name { color: #ff33cc; }
+
 
 /* videojs */
 div.vjs-error-display.vjs-modal-dialog { display: none; }

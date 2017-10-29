@@ -5,9 +5,10 @@ $(document).ready(function() {
   var uidToTwitchId  = {};
 
   var flair = {
-    "mods":          { style: "mods",     members: ["160400130", "53623670", "76912664", "166713997"] },
+    "mods":          { style: "mods",     members: ["160400130", "53623670", "166713997", "92122519"] },
     "hime":          { style: "hime",     members: ["47735570"]              },
     "vale":          { style: "vale",     members: ["27645199"]              },
+    "jacca":         { style: "jacca",    members: ["76912664"]              },
     "juice":         { style: "juice",    members: ["100783701"]             },
     "z00z":          { style: "overlord", members: ["81500175"]              },
   };
