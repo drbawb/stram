@@ -368,8 +368,11 @@
       };
 
       var emotes = {
+        ":valeBaka:": { path: "/images/valemotes/valeBaka.png" },
         ":valeBattle:": { path: "/images/valemotes/valeBattle.png" },
+        ":valeBite:": { path: "/images/valemotes/valeBite.png" },
         ":valeBlush:": { path: "/images/valemotes/valeBlush.png" },
+        ":valeCheer:": { path: "/images/valemotes/valeCheer.png" },
         ":valeCry:": { path: "/images/valemotes/valeCry.png" },
         ":valeDabL:": { path: "/images/valemotes/valeDabL.png" },
         ":valeDabR:": { path: "/images/valemotes/valeDabR.png" },
@@ -380,13 +383,17 @@
         ":valeGrrr:": { path: "/images/valemotes/valeGrrr.png" },
         ":valeHug:": { path: "/images/valemotes/valeHug.png" },
         ":valeHype:": { path: "/images/valemotes/valeHype.png" },
+        ":valeLewd:": { path: "/images/valemotes/valeLewd.png" },
         ":valeLove:": { path: "/images/valemotes/valeLove.png" },
         ":valeLurk:": { path: "/images/valemotes/valeLurk.png" },
         ":valeNano:": { path: "/images/valemotes/valeNano.png" },
+        ":valeOoh:": { path: "/images/valemotes/valeOoh.png" },
+        ":valeParty:": { path: "/images/valemotes/valeParty.png" },
         ":valeowValeHealsGoodMan:": { path: "/images/valemotes/valeowValeHealsGoodMan.png" },
         ":valeRIP:": { path: "/images/valemotes/valeRIP.png" },
         ":valeShrug:": { path: "/images/valemotes/valeShrug.png" },
         ":valeSmug:": { path: "/images/valemotes/valeSmug.png" },
+        ":valeTaxic:": { path: "/images/valemotes/valeTaxic.png" },
         ":valeThink:": { path: "/images/valemotes/valeThink.png" },
         ":valeWave:": { path: "/images/valemotes/valeWave.png" },
         ":valeYo:": { path: "/images/valemotes/valeYo.png" }
