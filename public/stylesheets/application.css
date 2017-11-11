@@ -78,7 +78,7 @@ a:visited {
 #alleluia-emote-menu {
   position: absolute;
   right: 0; bottom: 0; 
-  width: 150px; height: 170px;
+  width: 150px; height: 210px;
   background-color: #000000;
 
   display: flex;
@@ -129,10 +129,10 @@ a:visited {
   font-size: 16px;
 }
 
-.alleluia-line-vale  > span.alleluia-name { color: #efff32; font-family: 'Eater'; }
-.alleluia-line-jacca > span.alleluia-name { color: #ff69ca; font-family: 'Eater'; }
+.alleluia-line-vale  > span.alleluia-name { color: #efff32; }
+.alleluia-line-jacca > span.alleluia-name { color: #ff69ca; }
 .alleluia-line-hime  > span.alleluia-name { color: #14ffbd; font-family: 'Share Tech Mono', monospace; }
-.alleluia-line-mods  > span.alleluia-name { color: #00ced1; font-family: 'Eater'; }
+.alleluia-line-mods  > span.alleluia-name { color: #00ced1; }
 .alleluia-line-juice > span.alleluia-name { color: #ff33cc; }
 
 
