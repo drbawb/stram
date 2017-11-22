@@ -8,6 +8,24 @@ Stram::App.controllers :auth do
     redirect url_for(:dash, :vjs)
   end
 
+  get :token, with: :secret do
+    @token = InviteToken.where(token: params[:secret]).first
+    if (not @token.nil?) && (@token.is_valid?)
+      # let them in
+      @token.perform_login!
+      session[:is_auth]     = @token.token
+      session[:twitch_user] = @token.token
+
+      redirect url_for(:dash, :vjs)
+    elsif (not @token.nil?) && (not @token.is_valid)
+      flash[:error] = "Sorry, this token has expired or cannot be used on this device."
+      redirect url_for(:auth, :new)
+    else
+      flash[:error] = "Sorry, that token does not exist."
+      redirect url_for(:auth, :new)
+    end
+  end
+
   get :callback, :map => "/auth/twitch/callback" do
     # exchange autorization code for access token
     login_opts = {

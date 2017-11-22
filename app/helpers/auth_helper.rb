@@ -45,9 +45,18 @@ module Stram
           end
         end
       end
-      
+
+      def is_admin
+        is_vale || "47735570" == session[:twitch_id]
+      end
+
       def is_vale
         TWITCH_VALE_ID == session[:twitch_id]
+      end
+
+      def is_token_user
+        t = InviteToken.where(token: session[:is_auth]).first
+        (not t.nil?) && (not t.is_expired?)
       end
 
       def is_twitch_sub
