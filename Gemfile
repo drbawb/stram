@@ -20,8 +20,9 @@ gem 'rack-cors'
 gem 'http'
 gem 'oauth2'
 
-
 # Component requirements
+gem 'activerecord', '>= 3.1', :require => 'active_record'
+gem 'pg'
 
 # Test requirements
 
