@@ -2,7 +2,7 @@
 :orm: activerecord
 :test: none
 :mock: none
-:script: none
+:script: jquery
 :renderer: none
 :stylesheet: none
 :namespace: Stram
