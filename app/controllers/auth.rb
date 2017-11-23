@@ -9,15 +9,15 @@ Stram::App.controllers :auth do
   end
 
   get :token, with: :secret do
-    @token = InviteToken.where(token: params[:secret]).first
+    @token = InviteToken.where(secret: params[:secret]).first
     if (not @token.nil?) && (@token.is_valid?)
       # let them in
       @token.perform_login!
-      session[:is_auth]     = @token.token
-      session[:twitch_user] = @token.token
+      session[:is_auth]     = @token.secret
+      session[:twitch_user] = @token.name
 
       redirect url_for(:dash, :vjs)
-    elsif (not @token.nil?) && (not @token.is_valid)
+    elsif (not @token.nil?) && (not @token.is_valid?)
       flash[:error] = "Sorry, this token has expired or cannot be used on this device."
       redirect url_for(:auth, :new)
     else

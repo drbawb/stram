@@ -4,7 +4,9 @@
 var config = {
   // stream info
   streamURI: "//seraphina.fatalsyntax.com:9001/hls",
-  playlist: "test",
+  //streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  playlist: "cdn00",
+  // playlist: "cdn00",
   levels: ["low", "mid", "src"],
   friendly: ["Low (768K)", "Medium (2M)", "High (4M)"],
 

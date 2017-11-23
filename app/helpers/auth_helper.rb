@@ -14,7 +14,11 @@ module Stram
 
       def clear_session
         session[:is_auth] = false
+       
+        # clear twitch flags 
         session[:is_subscriber] = false
+        session[:twitch_user]   = nil
+        session[:twitch_id]     = nil
       end
 
       def refresh_session
@@ -55,7 +59,7 @@ module Stram
       end
 
       def is_token_user
-        t = InviteToken.where(token: session[:is_auth]).first
+        t = InviteToken.where(secret: session[:is_auth]).first
         (not t.nil?) && (not t.is_expired?)
       end
 

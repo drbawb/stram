@@ -1,0 +1,32 @@
+<div class="page-header">
+  <h3>Movie Night Tokens</h3>
+  <p>
+  These tokens provide a one-time access to a movie night stream.
+  Once a token is used to login it remains valid, for that IP address, for 24 hours.
+  After that the token expires and it will automatically be removed by the system.
+  </p>
+</div>
+
+<%= link_to 'Create Token', url_for(:tokens, :new) %>
+
+<table class="table">
+  <thead>
+    <th>token #</th>
+    <th>name</th>
+    <th>used on</th>
+    <th>expires on</th>
+    <th>manage</th>
+  </thead>
+
+  <tbody>
+    <% @tokens.each do |token| %>
+      <tr>
+        <td><input type="text" value="<%= uri url_for(:auth, :token, token.secret) %>" /></td>
+        <td><%= token.name %></td>
+        <td><%= token.authorized_at %></td>
+        <td><%= token.valid_until %></td>
+        <td><%= link_to 'Delete', url_for(:tokens, :destroy, token.id), method: :delete %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

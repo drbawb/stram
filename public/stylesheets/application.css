@@ -11,6 +11,12 @@ a:visited {
   color: #bababa;
 }
 
+table.table,
+table.table > th,td {
+  border: 1px solid #fff;
+  border-collapse: collapse;
+}
+
 .container {
   display: flex;
   flex-direction: column;
