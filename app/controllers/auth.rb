@@ -14,7 +14,8 @@ Stram::App.controllers :auth do
 	  # NOTE: don't forget to whitelist params if you do an #update_attributes() here
       # let them in
 	  logger.debug params.inspect
-      @token.name = params[:invite_token][:name]
+      @token.name      = params[:invite_token][:name]
+	  @token.client_ip = request.ip
       @token.perform_login!
       session[:is_auth]     = @token.secret
       session[:twitch_user] = @token.name
