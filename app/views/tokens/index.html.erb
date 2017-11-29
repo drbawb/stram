@@ -21,11 +21,14 @@
   <tbody>
     <% @tokens.each do |token| %>
       <tr>
-        <td><input type="text" value="<%= uri url_for(:auth, :token, token.secret) %>" /></td>
+        <td><input type="text" value="<%= uri url_for(:tokens, :show, token.secret) %>" /></td>
         <td><%= token.name %></td>
         <td><%= token.authorized_at %></td>
         <td><%= token.valid_until %></td>
-        <td><%= link_to 'Delete', url_for(:tokens, :destroy, token.id), method: :delete %></td>
+        <td>
+          <%= link_to 'Reset', url_for(:tokens, :reset, token.id), method: :post %>
+          <%= link_to 'Delete', url_for(:tokens, :destroy, token.id), method: :delete %>
+        </td>
       </tr>
     <% end %>
   </tbody>

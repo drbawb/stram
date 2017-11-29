@@ -8,10 +8,12 @@ Stram::App.controllers :auth do
     redirect url_for(:dash, :vjs)
   end
 
-  get :token, with: :secret do
+  post :token, with: :secret do
     @token = InviteToken.where(secret: params[:secret]).first
     if (not @token.nil?) && (@token.is_valid?)
       # let them in
+	  logger.debug params.inspect
+      @token.name = params[:invite_token][:name]
       @token.perform_login!
       session[:is_auth]     = @token.secret
       session[:twitch_user] = @token.name

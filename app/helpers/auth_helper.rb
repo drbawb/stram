@@ -64,6 +64,8 @@ module Stram
       end
 
       def is_twitch_sub
+        return false unless session[:twitch_id]
+
         refresh_session
         token = session[:twitch_token]
         
@@ -79,6 +81,8 @@ module Stram
         
         begin
           sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
+          logger.debug sub_uri
+          logger.debug oauth_opts.inspect
           response = HTTP.headers(oauth_opts).get(sub_uri)
           sub      = JSON.parse(response)
           logger.debug "got sub :: #{sub.to_s}"
