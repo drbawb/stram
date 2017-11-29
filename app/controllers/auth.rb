@@ -11,6 +11,7 @@ Stram::App.controllers :auth do
   post :token, with: :secret do
     @token = InviteToken.where(secret: params[:secret]).first
     if (not @token.nil?) && (@token.is_valid?)
+	  # NOTE: don't forget to whitelist params if you do an #update_attributes() here
       # let them in
 	  logger.debug params.inspect
       @token.name = params[:invite_token][:name]
