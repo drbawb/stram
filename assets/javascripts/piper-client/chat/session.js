@@ -128,32 +128,35 @@ module.exports = (function() {
       var message = JSON.parse(evt.data);
       var body, destination, notice;
 
-      if (message.variant === "TagUser") {
+      if (typeof(message["TagUser"]) !== "undefined") {
+        message = message["TagUser"];
         var tagApi = {
-          uid:   message.fields[0], // target
-          key:   message.fields[1],
-          value: message.fields[2]
+          uid:   message.destination, // Target
+          key:   message.key,         // string
+          value: message.tag          // string
         };
 
         emitTag(tagApi);
-      } else if (message.variant === "Notice") {
-        body        = message.fields[2]; // string
-        destination = message.fields[0]; // Target
-        var from    = message.fields[1]; // NameTag (optional)
+      } else if (typeof(message["Notice"]) !== "undefined") {
+        message = message["Notice"];
+        body        = message.payload; // string
+        destination = message.destination;
+        var from    = message.from; // NameTag (optional)
 
         // FIXME: if this is the `welcome` message - steal our uuid from it.
         // ideally `register` would actually generate a reply w/ our assigned ID.
         if (from === null && 
-          destination.variant == "UserById" && 
+          typeof(destination["UserById"]) !== null &&
           body.indexOf('welcome') === 0) {
 
-          uid = destination.fields[0];
+          uid = destination.uid;
 
           cb();
         }
-      } else if (message.variant == "Join") {
-        var user = message.fields[0];
-        roomname = message.fields[1];
+      } else if (typeof(message["Join"]) !== "undefined") {
+        message = message["Join"];
+        var user = message.uid;
+        roomname = message.channel;
 
         for (var tag in user.tags) {
           if (!user.tags.hasOwnProperty(tag)) { continue; }
@@ -173,24 +176,26 @@ module.exports = (function() {
 
         notice = user.name + " has joined #" + roomname + ".";
         console.warn(notice);
-      } else if (message.variant == "Disconnect") {
-        var userId   = message.fields[0][0];
-        var username = message.fields[0][1];
-        var reason   = message.fields[1];
+      } else if (typeof(message["Disconnect"]) !== "undefined") {
+        message = message["Disconnect"]
+        var userId   = message.uid[0];
+        var username = message.uid[1];
+        var reason   = message.reason;
         notice       = username + " has disconnected: " + reason + ".";
 
         emitDisconnect(userId);
         
         console.warn(notice);
-      } else if (message.variant === "ChatMessage") {
+      } else if (typeof(message["ChatMessage"]) !== "undefined") {
+        message = message["ChatMessage"];
         // field[0] => destination (Target)
         // field[1] => name        ([uid,string])
         // field[2] => body        (string)
 
-        body = message.fields[2];
+        body = message.payload;
         var from_user = {
-          uid:  message.fields[1][0],
-          name: message.fields[1][1]
+          uid:  message.from[0],
+          name: message.from[1]
         };
 
         console.log("got message: " + body);
@@ -209,8 +214,8 @@ module.exports = (function() {
 	function joinRoom() {
 		roomname = "movienight";
 		var path = '/rooms/' + roomname;
-		var method = { variant: "Subscribe", fields: [] };
-		var uri    = { variant: "Resource", fields: [method, path, null] };
+		var method = "Subscribe";
+		var uri    = {Resource: { method: method, path: path, payload: null } };
 
 		ws.send(JSON.stringify(uri));
 	}
