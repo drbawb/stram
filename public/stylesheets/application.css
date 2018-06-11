@@ -86,7 +86,7 @@ table.table > th,td {
 #alleluia-emote-menu {
   position: absolute;
   right: 0; bottom: 0; 
-  width: 150px; height: 210px;
+  width: 175px; height: 270px;
   background-color: #000000;
 
   display: flex;
