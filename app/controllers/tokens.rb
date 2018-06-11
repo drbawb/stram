@@ -16,7 +16,7 @@ Stram::App.controllers :tokens do
   get :show, with: :secret do
     @token = InviteToken.where(secret: params[:secret]).first
 
-    if (not @token.nil?) && (@token.is_valid?)
+    if (not @token.nil?) && (@token.is_valid? || @token.client_ip == request.ip)
       render "show"
     else
       flash[:error] = "Sorry, that token is not valid"
