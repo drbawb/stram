@@ -149,7 +149,7 @@ module.exports = (function() {
           typeof(destination["UserById"]) !== null &&
           body.indexOf('welcome') === 0) {
 
-          uid = destination.uid;
+          uid = destination["UserById"].uid;
 
           cb();
         }

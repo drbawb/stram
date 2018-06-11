@@ -175,7 +175,8 @@ $(document).ready(function() {
   client.onTag(function(tag) {
     switch (tag.key) {
       case "x-twitch-id":
-        uidToTwitchId[tag.uid.fields[0]] = JSON.parse(tag.value);
+        let uid = tag.uid["UserById"].uid;
+        uidToTwitchId[uid] = JSON.parse(tag.value);
         break;
 
       default:

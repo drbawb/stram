@@ -250,7 +250,7 @@
             // ideally `register` would actually generate a reply w/ our assigned ID.
             if (from === null && typeof destination["UserById"] !== null && body.indexOf('welcome') === 0) {
 
-              uid = destination.uid;
+              uid = destination["UserById"].uid;
 
               cb();
             }
@@ -509,7 +509,8 @@
       client.onTag(function (tag) {
         switch (tag.key) {
           case "x-twitch-id":
-            uidToTwitchId[tag.uid.fields[0]] = JSON.parse(tag.value);
+            var uid = tag.uid["UserById"].uid;
+            uidToTwitchId[uid] = JSON.parse(tag.value);
             break;
 
           default:
