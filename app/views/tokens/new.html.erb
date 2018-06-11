@@ -1,0 +1,17 @@
+<% form_for @token, url_for(:tokens, :create), method: :post do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+  <%= f.label :name, caption: "User's Name" %>
+  <%= f.text_field :name %>
+  </p>
+
+  <p>
+  <%= f.label :valid_until, caption: "Expiry Date" %>
+  <%= f.date_field :valid_until %>
+  </p>
+
+  <p>
+  <%= f.submit "Save" %>
+  </p>
+<% end %>

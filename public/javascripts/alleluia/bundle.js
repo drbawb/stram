@@ -64,18 +64,18 @@
        * Registers a user w/ the nirvash server; performing NO AUTHENTICATION.
        */
       me.registerUser = function (username) {
-        var uri = '/self/registration';
-        var method = { variant: "Put", fields: [] };
+        var uri = "/self/registration";
+        var method = "Put";
         var val = { name: username }; // struct RUser { name:string }
 
-        return { variant: "Resource", fields: [method, uri, JSON.stringify(val)] };
+        return { Resource: { method: method, path: uri, payload: JSON.stringify(val) } };
       };
 
       /**
        * Addresses a message to be broadcast to an entire room
        */
       me.targetRoom = function (room_name) {
-        return { variant: "RoomByName", fields: [room_name] };
+        return { RoomByName: { name: room_name } };
       };
 
       /**
@@ -85,9 +85,9 @@
       me.tagUser = function (uid, room_name, key, val) {
         // /rooms/{name}/{uid}/tag/{key}/{val}
         var uri = '/rooms/' + room_name + '/' + uid + '/tag/' + key;
-        var method = { variant: "Publish", fields: [] };
+        var method = "Publish";
 
-        return { variant: "Resource", fields: [method, uri, JSON.stringify(val)] };
+        return { Resource: { method: method, path: uri, payload: JSON.stringify(val) } };
       };
 
       /**
@@ -98,9 +98,9 @@
        */
       me.chatMessage = function (room_name, username, message) {
         var uri = '/rooms/' + room_name + '/messages';
-        var method = { variant: "Publish", fields: [] };
+        var method = "Publish";
 
-        return { variant: "Resource", fields: [method, uri, message] };
+        return { Resource: { method: method, path: uri, payload: message } };
       };
 
       return me;
@@ -231,30 +231,33 @@
           var message = JSON.parse(evt.data);
           var body, destination, notice;
 
-          if (message.variant === "TagUser") {
+          if (typeof message["TagUser"] !== "undefined") {
+            message = message["TagUser"];
             var tagApi = {
-              uid: message.fields[0], // target
-              key: message.fields[1],
-              value: message.fields[2]
+              uid: message.destination, // Target
+              key: message.key, // string
+              value: message.tag // string
             };
 
             emitTag(tagApi);
-          } else if (message.variant === "Notice") {
-            body = message.fields[2]; // string
-            destination = message.fields[0]; // Target
-            var from = message.fields[1]; // NameTag (optional)
+          } else if (typeof message["Notice"] !== "undefined") {
+            message = message["Notice"];
+            body = message.payload; // string
+            destination = message.destination;
+            var from = message.from; // NameTag (optional)
 
             // FIXME: if this is the `welcome` message - steal our uuid from it.
             // ideally `register` would actually generate a reply w/ our assigned ID.
-            if (from === null && destination.variant == "UserById" && body.indexOf('welcome') === 0) {
+            if (from === null && typeof destination["UserById"] !== null && body.indexOf('welcome') === 0) {
 
-              uid = destination.fields[0];
+              uid = destination["UserById"].uid;
 
               cb();
             }
-          } else if (message.variant == "Join") {
-            var user = message.fields[0];
-            roomname = message.fields[1];
+          } else if (typeof message["Join"] !== "undefined") {
+            message = message["Join"];
+            var user = message.uid;
+            roomname = message.channel;
 
             for (var tag in user.tags) {
               if (!user.tags.hasOwnProperty(tag)) {
@@ -276,24 +279,26 @@
 
             notice = user.name + " has joined #" + roomname + ".";
             console.warn(notice);
-          } else if (message.variant == "Disconnect") {
-            var userId = message.fields[0][0];
-            var username = message.fields[0][1];
-            var reason = message.fields[1];
+          } else if (typeof message["Disconnect"] !== "undefined") {
+            message = message["Disconnect"];
+            var userId = message.uid[0];
+            var username = message.uid[1];
+            var reason = message.reason;
             notice = username + " has disconnected: " + reason + ".";
 
             emitDisconnect(userId);
 
             console.warn(notice);
-          } else if (message.variant === "ChatMessage") {
+          } else if (typeof message["ChatMessage"] !== "undefined") {
+            message = message["ChatMessage"];
             // field[0] => destination (Target)
             // field[1] => name        ([uid,string])
             // field[2] => body        (string)
 
-            body = message.fields[2];
+            body = message.payload;
             var from_user = {
-              uid: message.fields[1][0],
-              name: message.fields[1][1]
+              uid: message.from[0],
+              name: message.from[1]
             };
 
             console.log("got message: " + body);
@@ -312,8 +317,8 @@
       function joinRoom() {
         roomname = "movienight";
         var path = '/rooms/' + roomname;
-        var method = { variant: "Subscribe", fields: [] };
-        var uri = { variant: "Resource", fields: [method, path, null] };
+        var method = "Subscribe";
+        var uri = { Resource: { method: method, path: path, payload: null } };
 
         ws.send(JSON.stringify(uri));
       }
@@ -373,29 +378,40 @@
         ":valeBite:": { path: "/images/valemotes/valeBite.png" },
         ":valeBlush:": { path: "/images/valemotes/valeBlush.png" },
         ":valeCheer:": { path: "/images/valemotes/valeCheer.png" },
+        ":valeCool:": { path: "/images/valemotes/valeCool.png" },
+        ":valeComfy:": { path: "/images/valemotes/valeComfy.png" },
         ":valeCry:": { path: "/images/valemotes/valeCry.png" },
+        ":valeEvil:": { path: "/images/valemotes/valeEvil.png" },
+        ":valeTreevenge:": { path: "/images/valemotes/valeCLurk.png" },
         ":valeDabL:": { path: "/images/valemotes/valeDabL.png" },
         ":valeDabR:": { path: "/images/valemotes/valeDabR.png" },
         ":valeEdgy:": { path: "/images/valemotes/valeEdgy.png" },
         ":valeFail:": { path: "/images/valemotes/valeFail.png" },
         ":valeGasm:": { path: "/images/valemotes/valeGasm.png" },
+        ":valeGiggle:": { path: "/images/valemotes/valeGiggle.png" },
+        ":valeGiggles:": { path: "/images/valemotes/valeGiggles.gif" },
         ":valeGG:": { path: "/images/valemotes/valeGG.png" },
         ":valeGrrr:": { path: "/images/valemotes/valeGrrr.png" },
         ":valeHug:": { path: "/images/valemotes/valeHug.png" },
         ":valeHype:": { path: "/images/valemotes/valeHype.png" },
         ":valeLewd:": { path: "/images/valemotes/valeLewd.png" },
         ":valeLove:": { path: "/images/valemotes/valeLove.png" },
+        ":valeLoves:": { path: "/images/valemotes/valeLoves.gif" },
         ":valeLurk:": { path: "/images/valemotes/valeLurk.png" },
         ":valeNano:": { path: "/images/valemotes/valeNano.png" },
         ":valeOoh:": { path: "/images/valemotes/valeOoh.png" },
         ":valeParty:": { path: "/images/valemotes/valeParty.png" },
+        ":valeParties:": { path: "/images/valemotes/valeParties.gif" },
         ":valeowValeHealsGoodMan:": { path: "/images/valemotes/valeowValeHealsGoodMan.png" },
         ":valeRIP:": { path: "/images/valemotes/valeRIP.png" },
         ":valeShrug:": { path: "/images/valemotes/valeShrug.png" },
+        ":valeSip:": { path: "/images/valemotes/valeSip.png" },
         ":valeSmug:": { path: "/images/valemotes/valeSmug.png" },
         ":valeTaxic:": { path: "/images/valemotes/valeTaxic.png" },
         ":valeThink:": { path: "/images/valemotes/valeThink.png" },
         ":valeWave:": { path: "/images/valemotes/valeWave.png" },
+        ":valeWingL:": { path: "/images/valemotes/valeWingL.png" },
+        ":valeWingR:": { path: "/images/valemotes/valeWingR.png" },
         ":valeYo:": { path: "/images/valemotes/valeYo.png" }
       };
 
@@ -483,7 +499,7 @@
         var style = flairForUser(twitchId);
         var name = user.name;
         if (style === 'hime') {
-          name = 'hime~';
+          name = '『hime-chan』';
         }
 
         appendMessage(style, name, stripEntities(msg));
@@ -493,7 +509,8 @@
       client.onTag(function (tag) {
         switch (tag.key) {
           case "x-twitch-id":
-            uidToTwitchId[tag.uid.fields[0]] = JSON.parse(tag.value);
+            var uid = tag.uid["UserById"].uid;
+            uidToTwitchId[uid] = JSON.parse(tag.value);
             break;
 
           default:
@@ -572,3 +589,4 @@
       }
     });
   }, { "./chat/events.js": 1 }] }, {}, [4]);
+

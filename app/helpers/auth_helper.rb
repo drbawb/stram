@@ -14,7 +14,11 @@ module Stram
 
       def clear_session
         session[:is_auth] = false
+       
+        # clear twitch flags 
         session[:is_subscriber] = false
+        session[:twitch_user]   = nil
+        session[:twitch_id]     = nil
       end
 
       def refresh_session
@@ -45,12 +49,23 @@ module Stram
           end
         end
       end
-      
+
+      def is_admin
+        is_vale || "47735570" == session[:twitch_id]
+      end
+
       def is_vale
         TWITCH_VALE_ID == session[:twitch_id]
       end
 
+      def is_token_user
+        t = InviteToken.where(secret: session[:is_auth]).first
+        (not t.nil?) && (not t.is_expired?)
+      end
+
       def is_twitch_sub
+        return false unless session[:twitch_id]
+
         refresh_session
         token = session[:twitch_token]
         
@@ -66,6 +81,8 @@ module Stram
         
         begin
           sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
+          logger.debug sub_uri
+          logger.debug oauth_opts.inspect
           response = HTTP.headers(oauth_opts).get(sub_uri)
           sub      = JSON.parse(response)
           logger.debug "got sub :: #{sub.to_s}"

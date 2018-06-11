@@ -44,30 +44,41 @@ $(document).ready(function() {
     ":valeBite:":               {path: "/images/valemotes/valeBite.png"},
     ":valeBlush:":              {path: "/images/valemotes/valeBlush.png"},
     ":valeCheer:":              {path: "/images/valemotes/valeCheer.png"},
+    ":valeCool:":               {path: "/images/valemotes/valeCool.png"},
+    ":valeComfy:":              {path: "/images/valemotes/valeComfy.png"},
     ":valeCry:":                {path: "/images/valemotes/valeCry.png"},
+    ":valeEvil:":               {path: "/images/valemotes/valeEvil.png"},
+    ":valeTreevenge:":          {path: "/images/valemotes/valeCLurk.png"},
     ":valeDabL:":               {path: "/images/valemotes/valeDabL.png"},
     ":valeDabR:":               {path: "/images/valemotes/valeDabR.png"},
     ":valeEdgy:":               {path: "/images/valemotes/valeEdgy.png"},
     ":valeFail:":               {path: "/images/valemotes/valeFail.png"},
     ":valeGasm:":               {path: "/images/valemotes/valeGasm.png"},
+    ":valeGiggle:":             {path: "/images/valemotes/valeGiggle.png"},
+    ":valeGiggles:":            {path: "/images/valemotes/valeGiggles.gif"},
     ":valeGG:":                 {path: "/images/valemotes/valeGG.png"},
     ":valeGrrr:":               {path: "/images/valemotes/valeGrrr.png"},
     ":valeHug:":                {path: "/images/valemotes/valeHug.png"},
     ":valeHype:":               {path: "/images/valemotes/valeHype.png"},
     ":valeLewd:":               {path: "/images/valemotes/valeLewd.png"},
     ":valeLove:":               {path: "/images/valemotes/valeLove.png"},
+    ":valeLoves:":              {path: "/images/valemotes/valeLoves.gif"},
     ":valeLurk:":               {path: "/images/valemotes/valeLurk.png"},
     ":valeNano:":               {path: "/images/valemotes/valeNano.png"},
     ":valeOoh:":                {path: "/images/valemotes/valeOoh.png"},
     ":valeParty:":              {path: "/images/valemotes/valeParty.png"},
+    ":valeParties:":            {path: "/images/valemotes/valeParties.gif"},
     ":valeowValeHealsGoodMan:": {path: "/images/valemotes/valeowValeHealsGoodMan.png"},
     ":valeRIP:":                {path: "/images/valemotes/valeRIP.png"},
     ":valeShrug:":              {path: "/images/valemotes/valeShrug.png"},
+    ":valeSip:":                {path: "/images/valemotes/valeSip.png"},
     ":valeSmug:":               {path: "/images/valemotes/valeSmug.png"},
     ":valeTaxic:":              {path: "/images/valemotes/valeTaxic.png"},
     ":valeThink:":              {path: "/images/valemotes/valeThink.png"},
     ":valeWave:":               {path: "/images/valemotes/valeWave.png"},
-    ":valeYo:":                 {path: "/images/valemotes/valeYo.png"}
+    ":valeWingL:":              {path: "/images/valemotes/valeWingL.png"},
+    ":valeWingR:":              {path: "/images/valemotes/valeWingR.png"},
+    ":valeYo:":                 {path: "/images/valemotes/valeYo.png"},
   };
 
   var scanForEmotes = function(msg) {
@@ -155,7 +166,7 @@ $(document).ready(function() {
     var twitchId = uidToTwitchId[user.uid];
     var style = flairForUser(twitchId);
     var name  = user.name;
-    if (style === 'hime') { name = 'hime~'; }
+    if (style === 'hime') { name = '『hime-chan』'; }
 
     appendMessage(style, name, stripEntities(msg));
   });
@@ -164,7 +175,8 @@ $(document).ready(function() {
   client.onTag(function(tag) {
     switch (tag.key) {
       case "x-twitch-id":
-        uidToTwitchId[tag.uid.fields[0]] = JSON.parse(tag.value);
+        let uid = tag.uid["UserById"].uid;
+        uidToTwitchId[uid] = JSON.parse(tag.value);
         break;
 
       default:

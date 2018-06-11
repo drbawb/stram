@@ -3,12 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= csrf_meta_tags %>
+
     <title>vale's movie night</title>
     <%= stylesheet_link_tag :application %>
 
 		<!-- codec stuff -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <%= javascript_include_tag "jquery" %>
+    <%= javascript_include_tag "jquery", "jquery-ujs" %>
     <%= yield_content :head %>
 
     <link href="https://fonts.googleapis.com/css?family=Eater|Libre+Barcode+39+Extended|Share+Tech+Mono" rel="stylesheet">
@@ -19,6 +21,7 @@
   </head>
 
   <body>
+    <%= flash_tag :error, class: "flash flash-error" %>
     <%= yield %>
   </body>
 

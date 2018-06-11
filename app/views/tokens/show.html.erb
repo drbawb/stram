@@ -1,0 +1,17 @@
+<div class="center-box">
+  <div class="welcome-message">
+    <h3>Movie Pass</h3>
+
+    <p>
+    To login with your movie pass just click on the link below!
+    Once you've logged in the pass will be tied to this computer, and valid
+    for the next 24 hours.
+    </p>
+    <% form_for @token, url_for(:auth, :token, @token.secret), method: :post do |f| %>
+      <%= f.label :name, caption: "Chat Username" %>
+      <%= f.text_field :name %>
+      <%= f.submit "Login", class: "btn btn-primary" %>
+    <% end %> 
+
+  </div>
+</div>
