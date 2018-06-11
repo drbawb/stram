@@ -5,6 +5,7 @@ var config = {
   // stream info
   streamURI: "//seraphina.fatalsyntax.com:9001/hls",
   //streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
   playlist: "cdn00",
   // playlist: "cdn00",
   levels: ["low", "mid", "src"],
@@ -239,14 +240,18 @@ var installErrorTrap = function installErrorTrap() {
   if (ready < 4) { notReady++; }
   if (ready === 4) { notReady = 0; }
 
-
   if (error || (notIndex > config.NOT_INDEX_SEC) || (notReady > config.NOT_READY_SEC)) {
-    console.warn("not ready: " + notReady);
     console.warn(error);
-
+    
+    if (!indexMissing) {
+      // when the index is present but we lost sync: switch to CDN
+      console.warn("move to backup stream; not ready: " + notReady);
+      config.streamURI = config.backupStreamURI;
+    }
+ 
     // reinit the player to get BRB screen
     resetPlayer("my-video");
-    
+
     // start looking for stream again
     // TODO: move these status flags into a struct
     notReady    = 0;
