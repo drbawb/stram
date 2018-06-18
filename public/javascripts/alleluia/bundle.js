@@ -268,7 +268,7 @@
               //       but apparently the real API doesn't pull it out
               //       RIP ...
               emitTag({
-                uid: { fields: [user.uid] },
+                uid: { UserById: { uid: user.uid } },
                 key: tag,
                 value: user.tags[tag]
               });
