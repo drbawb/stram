@@ -3,14 +3,14 @@
 // hot new shit...
 var config = {
   // stream info
-  streamURI: "//seraphina.fatalsyntax.com:9001/hls",
-  backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
-  //streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
-  //backupStreamURI: "//seraphina.fatalsyntax.com:9001/hls",
+  //streamURI: "//seraphina.fatalsyntax.com:9001/hls",
+  //backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  backupStreamURI: "//seraphina.fatalsyntax.com:9001/hls",
   playlist: "cdn00",
   // playlist: "cdn00",
-  levels: ["low", "mid", "src"],
-  friendly: ["Low (768K)", "Medium (2M)", "High (4M)"],
+  levels: ["0", "1", "2"],
+  friendly: ["High (4M)", "Medium (2M)", "Low (768k)"],
 
   // no tricks, no gimmicks
   MIN_SEGMENTS: 3,
