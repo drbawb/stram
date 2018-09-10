@@ -144,6 +144,22 @@ table.table > th,td {
 .alleluia-line-juice > span.alleluia-name { color: #ff33cc; }
 .alleluia-line-chaos > span.alleluia-name { color: #c33bed; }
 
+
+/* birthday */
+.alleluia-line-bday > .alleluia-name::before { 
+	content: "";
+	display: inline-block;
+	width: 28px; height: 28px;
+	margin-right: 10px;
+	background: url("/images/valemotes/valeParty.png") center/28px 28px;
+}
+
+.alleluia-line-bday  > span.alleluia-name { color: #4e31bc; }
+
+
+/* .alleluia-line-bday  > span.alleluia-name { color: #2c1967; } */
+
+
 /* videojs */
 div.vjs-error-display.vjs-modal-dialog { display: none; }
 

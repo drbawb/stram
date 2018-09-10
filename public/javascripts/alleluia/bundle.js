@@ -343,7 +343,8 @@
         "jacca": { style: "jacca", members: ["76912664"] },
         "juice": { style: "juice", members: ["100783701"] },
         "chaos": { style: "chaos", members: ["162500120"] },
-        "z00z": { style: "overlord", members: ["81500175"] }
+        "z00z": { style: "overlord", members: ["81500175"] },
+        "bday": { style: "bday", members: [] }
       };
 
       var flairForUser = function flairForUser(id) {
@@ -400,11 +401,13 @@
         ":valeLoves:": { path: "/images/valemotes/valeLoves.gif" },
         ":valeLurk:": { path: "/images/valemotes/valeLurk.png" },
         ":valeNano:": { path: "/images/valemotes/valeNano.png" },
+        ":valeNom:": { path: "/images/valemotes/valeNom.png" },
         ":valeOoh:": { path: "/images/valemotes/valeOoh.png" },
         ":valeParty:": { path: "/images/valemotes/valeParty.png" },
         ":valeParties:": { path: "/images/valemotes/valeParties.gif" },
         ":valeowValeHealsGoodMan:": { path: "/images/valemotes/valeowValeHealsGoodMan.png" },
         ":valeRIP:": { path: "/images/valemotes/valeRIP.png" },
+        ":valeS:": { path: "/images/valemotes/valeS.png" },
         ":valeShrug:": { path: "/images/valemotes/valeShrug.png" },
         ":valeSip:": { path: "/images/valemotes/valeSip.png" },
         ":valeSmug:": { path: "/images/valemotes/valeSmug.png" },
@@ -413,7 +416,8 @@
         ":valeWave:": { path: "/images/valemotes/valeWave.png" },
         ":valeWingL:": { path: "/images/valemotes/valeWingL.png" },
         ":valeWingR:": { path: "/images/valemotes/valeWingR.png" },
-        ":valeYo:": { path: "/images/valemotes/valeYo.png" }
+        ":valeYo:": { path: "/images/valemotes/valeYo.png" },
+        ":valeZZZ:": { path: "/images/valemotes/valeZZZ.png" }
       };
 
       var scanForEmotes = function scanForEmotes(msg) {
