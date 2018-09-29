@@ -3,13 +3,13 @@
 // hot new shit...
 var config = {
   // stream info
-  //streamURI: "//seraphina.fatalsyntax.com:9001/hls",
-  //backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
-  streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
-  backupStreamURI: "//seraphina.fatalsyntax.com:9001/hls",
+  streamURI: "//seraphina.fatalsyntax.com:9001/hls",
+  backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  //streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  //backupStreamURI: "//seraphina.fatalsyntax.com:9001/hls",
   playlist: "cdn00",
   // playlist: "cdn00",
-  levels: ["0", "1", "2"],
+  levels: ["src", "mid", "low"],
   friendly: ["High (4M)", "Medium (2M)", "Low (768k)"],
 
   // no tricks, no gimmicks
@@ -239,7 +239,7 @@ var installErrorTrap = function installErrorTrap() {
 
   // count seconds stream is unable to buffer
   if (ready < 4) { notReady++; }
-  if (ready === 4) { notReady = 0; }
+  if (ready == 3 || ready === 4) { notReady = 0; }
 
   if (error || (notIndex > config.NOT_INDEX_SEC) || (notReady > config.NOT_READY_SEC)) {
     console.warn(error);
