@@ -7,6 +7,7 @@ source 'https://rubygems.org'
 # gemspec
 
 # Server requirements
+gem 'thin'
 # gem 'thin' # or mongrel
 # gem 'trinidad', :platform => 'jruby'
 

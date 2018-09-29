@@ -1,5 +1,6 @@
 module Stram
   class App < Padrino::Application
+    use ConnectionPoolManagement
     register Padrino::Mailer
     register Padrino::Helpers
     enable :sessions
@@ -10,7 +11,6 @@ module Stram
         resource '*', :headers => :any, :methods => [:get]
       end
     end
-
 
     ##
     # Caching support.
