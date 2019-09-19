@@ -169,14 +169,33 @@ var proceedWhenReady = function proceedWhenReady() {
   player.src({
     src: config.streamURI + "/" + config.playlist + ".m3u8",
     type: 'application/x-mpegURL',
-    withCredentials: false
+    withCredentials: false,
+    autoplay: false,
   });
 
   player.ready(function() {
     var quality = player.qualityMenu();
     installIndexTrap();
     installErrorTrap();
-    player.play();
+    player.play().then(function() {
+      console.log("video started a-ok...");
+    }).catch(function(error) {
+      console.warn("video did not start, check autoplay");
+      player.muted(true);
+      player.play().then(function() {
+        console.log("video started muted, show autoplay notification");
+        let mutedError = document.querySelector("#muted-error");
+
+        mutedError.classList.add("visible");
+        mutedError.addEventListener("click", function(evt) {
+          player.muted(false);
+          mutedError.classList.remove("visible");
+        });
+      }).catch(function(error) {
+        console.warn(error);
+        console.warn("double fault while starting video, giving up!");
+      });
+    });
   });
 };
 

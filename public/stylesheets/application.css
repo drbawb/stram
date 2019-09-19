@@ -23,6 +23,21 @@ table.table > th,td {
   height: 100%;
 }
 
+#muted-error {
+  display: none;
+  padding: 10px;
+
+  border: 1px #4a4100 solid;
+  background-color: #fffba8;
+  color: #4a4100;
+
+  cursor: pointer;
+}
+
+#muted-error.visible {
+  display: block;
+}
+
 .movie-box {
   display: flex; 
   flex-direction: column;
