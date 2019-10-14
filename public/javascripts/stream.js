@@ -3,10 +3,14 @@
 // hot new shit...
 var config = {
   // stream info
+  // main server
   streamURI: "//seraphina.fatalsyntax.com:9001/hls",
   backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+
+  // cdn
   //streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
   //backupStreamURI: "//seraphina.fatalsyntax.com:9001/hls",
+
   playlist: "cdn00",
   // playlist: "cdn00",
   levels: ["src", "mid", "low"],
@@ -130,7 +134,8 @@ var searchForStream = function searchForStream() {
   req.open("GET", config.streamURI + "/" + config.playlist + ".m3u8");
   req.addEventListener("load", function () {
     if (this.status !== 200) {
-      console.warn("stream not avail: " + this.status);return;
+      // console.warn("stream not avail: " + this.status);
+      return;
     }
     streamFound = true;
     testStreamHealth();
