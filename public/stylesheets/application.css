@@ -158,7 +158,7 @@ table.table > th,td {
 .alleluia-line-mods  > span.alleluia-name { color: #00ced1; }
 .alleluia-line-juice > span.alleluia-name { color: #ff33cc; }
 .alleluia-line-chaos > span.alleluia-name { color: #c33bed; }
-
+.alleluia-line-president > span.alleluia-name { color: #2fd000; }
 
 /* birthday */
 .alleluia-line-bday > .alleluia-name::before { 

@@ -4,15 +4,28 @@ $(document).ready(function() {
 
   var uidToTwitchId  = {};
 
+  var modFlairMembers = [
+    "160400130",
+    "166713997",
+    "164390292",
+    "129190457",
+    "134640094",
+    "178144832",
+    "42367965",
+  ];
+
+  
+
   var flair = {
-    "mods":          { style: "mods",     members: ["160400130", "166713997", "164390292", "129190457", "134640094", "178144832", "42367965"] },
-    "hime":          { style: "hime",     members: ["47735570"]  },
-    "vale":          { style: "vale",     members: ["27645199"]  },
-    "jacca":         { style: "jacca",    members: ["76912664"]  },
-    "juice":         { style: "juice",    members: ["100783701"] },
-    "chaos":         { style: "chaos",    members: ["162500120"] },
-    "z00z":          { style: "overlord", members: ["81500175"]  },
-    "bday":          { style: "bday",     members: []            },
+    "mods":          { style: "mods",      members: modFlairMembers },
+    "hime":          { style: "hime",      members: ["47735570"]    },
+    "vale":          { style: "vale",      members: ["27645199"]    },
+    "jacca":         { style: "jacca",     members: ["76912664"]    },
+    "juice":         { style: "juice",     members: ["100783701"]   },
+    "chaos":         { style: "chaos",     members: ["162500120"]   },
+    "z00z":          { style: "overlord",  members: ["81500175"]    },
+    "bday":          { style: "bday",      members: []              },
+    "president":     { style: "president", members: ["174913952"]   },
   };
 
   var flairForUser = function(id) {
