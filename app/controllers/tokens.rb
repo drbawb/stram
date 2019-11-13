@@ -26,7 +26,7 @@ Stram::App.controllers :tokens do
 
   get :new do
     @token = InviteToken.new
-    @token.valid_until = Time.now + 1.day
+    @token.valid_until = Time.now.getutc + 1.day
 
     render "new"
   end
