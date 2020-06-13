@@ -96,7 +96,10 @@ table.table > th,td {
   background-color: #ff0000;
 }
 
-.emote { width: 28px; height: 28px; }
+.emote { width: 40px; height: 40px; }
+
+
+#alleluia-emote-menu .emote { width: 28px; height: 28px; }
 
 #alleluia-emote-menu {
   position: absolute;
@@ -189,7 +192,7 @@ div.vjs-quality-menu-list.visible {
 div.vjs-quality-menu-level {}
 div.vjs-quality-menu-level:hover { background-color: #bababa; }
 
-@media only screen and (min-width: 640px) {
+@media only screen and (min-width: 768px) {
   .container {
     background-color: #000000;
     flex-direction: row;

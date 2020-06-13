@@ -4,6 +4,16 @@ module Stram
       TWITCH_VALE_ID=27645199
       TWITCH_REDIRECT_URI="http://valestream.fatalsyntax.com/auth/twitch/callback"
 
+      MODS = [
+        "166713997", # m_ichelle
+        "164390292", # linz87
+        "129190457", # skyshock101
+        "134640094", # shrdluuu
+        "178144832", # charms1960
+        "42367965",  # gabbydarko
+        "47735570",  # hime
+      ]
+
       def client
         OAuth2::Client.new(ENV["TWITCH_CLIENT_ID"], 
                            ENV["TWITCH_CLIENT_SECRET"],
@@ -51,7 +61,7 @@ module Stram
       end
 
       def is_admin
-        is_vale || "47735570" == session[:twitch_id]
+        is_vale || MODS.include?(session[:twitch_id])
       end
 
       def is_vale

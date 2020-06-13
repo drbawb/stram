@@ -54,6 +54,8 @@ $(document).ready(function() {
   };
 
   var emotes = {
+    ":contentTap:":             {path: "/images/valemotes/contentTap.gif"},
+    ":contentKeyTap:":          {path: "/images/valemotes/contentKeyTap.gif"},
     ":valeAYAYA:":              {path: "/images/valemotes/valeAYAYA.png"},
     ":valeBaka:":               {path: "/images/valemotes/valeBaka.png"},
     ":valeBattle:":             {path: "/images/valemotes/valeBattle.png"},
@@ -65,7 +67,7 @@ $(document).ready(function() {
     ":valeComfy:":              {path: "/images/valemotes/valeComfy.png"},
     ":valeCry:":                {path: "/images/valemotes/valeCry.png"},
     ":valeEvil:":               {path: "/images/valemotes/valeEvil.png"},
-    ":valeTreevenge:":          {path: "/images/valemotes/valeCLurk.png"},
+    //":valeTreevenge:":          {path: "/images/valemotes/valeCLurk.png"},
     ":valeD:":                  {path: "/images/valemotes/valeD.png"},
     ":valeDabL:":               {path: "/images/valemotes/valeDabL.png"},
     ":valeDabR:":               {path: "/images/valemotes/valeDabR.png"},
@@ -84,13 +86,15 @@ $(document).ready(function() {
     ":valeLoves:":              {path: "/images/valemotes/valeLoves.gif"},
     ":valeLurk:":               {path: "/images/valemotes/valeLurk.png"},
     ":valeNano:":               {path: "/images/valemotes/valeNano.png"},
+    ":valeNeko:":               {path: "/images/valemotes/valeNeko.png"},
     ":valeNom:":                {path: "/images/valemotes/valeNom.png"},
     ":valeOoh:":                {path: "/images/valemotes/valeOoh.png"},
     ":valePanic:":              {path: "/images/valemotes/valePanic.png"},
+    ":valePanics:":             {path: "/images/valemotes/valePanics.gif"},
     ":valeParty:":              {path: "/images/valemotes/valeParty.png"},
     ":valeParties:":            {path: "/images/valemotes/valeParties.gif"},
     ":valeowValeHealsGoodMan:": {path: "/images/valemotes/valeowValeHealsGoodMan.png"},
-    ":valeRiotH:":              {path: "/images/valemotes/valeRiotH.png"},
+    ":valeRiot:":               {path: "/images/valemotes/valeRiot.png"},
     ":valeRIP:":                {path: "/images/valemotes/valeRIP.png"},
     ":valeS:":                  {path: "/images/valemotes/valeS.png"},
     ":valeShrug:":              {path: "/images/valemotes/valeShrug.png"},
@@ -114,7 +118,7 @@ $(document).ready(function() {
 
     // match :vale(emoteName): and substitute each one if it
     // w/ an image if it is a valid emote
-    var m; var re = /:vale.*?:/g;
+    var m; var re = /(?::vale|:content).*?:/g;
     do {
       m = re.exec(msg);
       if (m && emotes[m[0]]) {
