@@ -4,17 +4,17 @@
 var config = {
   // stream info
   // main server
-  streamURI: "//seraphina.fatalsyntax.com:9001/hls",
-  backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  //streamURI: "//seraphina.fatalsyntax.com:9001/hls",
+  //backupStreamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
 
   // cdn
-  //streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
-  //backupStreamURI: "//seraphina.fatalsyntax.com:9001/hls",
+  streamURI: "//dcffedvtw5rxg.cloudfront.net/hls",
+  backupStreamURI: "//seraphina.fatalsyntax.com:9001/hls",
 
   playlist: "cdn00",
   // playlist: "cdn00",
-  levels: ["src", "mid", "low"],
-  friendly: ["High (4M)", "Medium (2M)", "Low (768k)"],
+  levels: ["src", "mid"],
+  friendly: ["High (3M)", "Medium (2M)"],
 
   // no tricks, no gimmicks
   MIN_SEGMENTS: 3,
