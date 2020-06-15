@@ -5,6 +5,12 @@ TWITCH_CLIENT_ID=<your app's client ID>
 TWITCH_CLIENT_SECRET=<your app's current client secret>
 ```
 
+Additionally, if you wish to create single-use auth tokens via the API, set:
+
+```
+BOTMAIN_API_KEY=<any secure random string>
+```
+
 Basic usage instructions:
 
 - install ruby 2.4
@@ -26,3 +32,14 @@ Admin notes:
   - An RTMP source, `ffmpeg` or `OBS` work well.
   - If this HLS server is on another origin you will need to setup 
     CORS headers in the `nginx` configuraiton
+
+API usage:
+
+- Call `POST /api/twitch_token/<user id>`
+  - `Accept: application/json`
+  - `Authorization: <BOTMAIN_API_KEY>`
+  - This will create an entry in the `twitch_tokens` table for the
+    provided twitch user ID. The next time that user logs in this table
+    will be used to find a suitable one time token. If no such token is 
+    found the subscription is processed as normal.
+    
