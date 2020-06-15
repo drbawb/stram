@@ -88,17 +88,31 @@ module Stram
         response  = HTTP.headers(oauth_opts).get("https://api.twitch.tv/kraken")
         user      = JSON.parse(response)
         user_name = user["token"]["user_id"]
-        
-        begin
-          sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
-          logger.debug sub_uri
-          logger.debug oauth_opts.inspect
-          response = HTTP.headers(oauth_opts).get(sub_uri)
-          sub      = JSON.parse(response)
-          logger.debug "got sub :: #{sub.to_s}"
-          logger.debug "sub_uri :: #{sub_uri}"
 
-          sub["error"].nil? and not sub["_id"].nil?
+        begin
+          # check if they exist in our table
+          valid_until = TwitchToken.arel_table[:valid_until]
+          tt = TwitchToken
+            .where(twitch_id: user_name)
+            .where(valid_until.gteq(Time.now).or(valid_until.eq(nil)))
+            .first
+
+          if tt.nil?
+            # check if they are subscribed
+            sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
+            logger.debug sub_uri
+            logger.debug oauth_opts.inspect
+            response = HTTP.headers(oauth_opts).get(sub_uri)
+            sub      = JSON.parse(response)
+            logger.debug "got sub :: #{sub.to_s}"
+            logger.debug "sub_uri :: #{sub_uri}"
+
+            sub["error"].nil? and not sub["_id"].nil?
+          else
+            # use token & validate expiration date
+            tt.perform_login!
+            not tt.is_expired?
+          end
         rescue JSON::ParserError => err
           logger.warn "failed to get subscriber response"
           false
