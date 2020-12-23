@@ -4,7 +4,13 @@ Stram::App.controllers :dash do
   # end
 
   get :chat do
-    render "dash/chat"
+    if session[:is_auth] && (is_token_user || is_vale || is_twitch_sub)
+      render "dash/chat"
+    elsif session[:is_auth]
+      redirect url_for(:auth, :no_sub)
+    else
+      redirect url_for(:auth, :new)
+    end
   end
 
   get :vjs, :map => '/' do

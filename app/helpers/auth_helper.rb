@@ -95,7 +95,7 @@ module Stram
           tt = TwitchToken
             .where(twitch_id: user_name)
             .where(valid_until.gteq(Time.now).or(valid_until.eq(nil)))
-            .order(valid_until: :asc) # use "oldest" token first
+            .order(created_at: :asc) # use "oldest" token first
             .first
 
           if tt.nil?
