@@ -28,6 +28,7 @@ module Stram
         # clear twitch flags 
         session[:is_subscriber] = false
         session[:twitch_user]   = nil
+        session[:twitch_name]   = nil
         session[:twitch_id]     = nil
       end
 
@@ -82,33 +83,47 @@ module Stram
         # use authorization to check channel sub
         oauth_opts = {
           "Client-ID": ENV["TWITCH_CLIENT_ID"],
-          "Authorization" => "OAuth #{token["access_token"]}",
-          "Accept" => "application/vnd.twitchtv.v5+json"
+          "Authorization" => "Bearer #{token["access_token"]}",
+          "Accept" => "application/vnd.twitchtv.v6+json"
         }
-        response  = HTTP.headers(oauth_opts).get("https://api.twitch.tv/kraken")
-        user      = JSON.parse(response)
-        user_name = user["token"]["user_id"]
+
+
+        user_uri = URI::HTTPS.build(host: "api.twitch.tv", path: "/helix/users")
+        response = HTTP.headers(oauth_opts).get(user_uri)
+        logger.debug "is sub user resp #{response.to_s}"
+        return false unless response.code == 200
+
+        user = JSON.parse(response)["data"][0]
+        session[:twitch_name] = user["display_name"]
+        logger.debug "is sub user :: #{user}"
+
 
         begin
           # check if they exist in our table
           valid_until = TwitchToken.arel_table[:valid_until]
           tt = TwitchToken
-            .where(twitch_id: user_name)
+            .where(twitch_id: user["login"])
             .where(valid_until.gteq(Time.now).or(valid_until.eq(nil)))
             .order(created_at: :asc) # use "oldest" token first
             .first
 
           if tt.nil?
+
+            sub_uri = URI::HTTPS.build(host: "api.twitch.tv",
+                                       path: "/helix/subscriptions/user",
+                                       query: "broadcaster_id=#{TWITCH_VALE_ID}&user_id=#{session[:twitch_id]}")
+
+
+            response  = HTTP.headers(oauth_opts).get(sub_uri)
+
             # check if they are subscribed
-            sub_uri  = "https://api.twitch.tv/kraken/users/#{user_name}/subscriptions/#{TWITCH_VALE_ID}"
-            logger.debug sub_uri
-            logger.debug oauth_opts.inspect
             response = HTTP.headers(oauth_opts).get(sub_uri)
-            sub      = JSON.parse(response)
+            return false unless response.code == 200
+            sub = JSON.parse(response)
             logger.debug "got sub :: #{sub.to_s}"
             logger.debug "sub_uri :: #{sub_uri}"
 
-            sub["error"].nil? and not sub["_id"].nil?
+            sub["error"].nil? and not sub["data"].nil?
           else
             # use token & validate expiration date
             tt.perform_login!

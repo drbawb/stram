@@ -1,6 +1,7 @@
 # vale login id: 27645199
 
-TWITCH_REDIRECT_URI="http://valestream.fatalsyntax.com/auth/twitch/callback"
+TWITCH_REDIRECT_URI=Stram::App::AuthHelper::TWITCH_REDIRECT_URI
+TWITCH_VALE_ID=Stram::App::AuthHelper::TWITCH_VALE_ID
 
 Stram::App.controllers :auth do
   get :logout do
@@ -40,30 +41,35 @@ Stram::App.controllers :auth do
     }
 
     # get an authorization token
-    auth_uri = URI::HTTPS.build(host: "api.twitch.tv",
-                                path: "/kraken/oauth2/token")
+    auth_uri = URI::HTTPS.build(host: "id.twitch.tv",
+                                path: "/oauth2/token")
 
     response = HTTP.post(auth_uri, params: login_opts)
     token    = JSON.parse(response.body)
     logger.debug "got twitch token :: #{token.to_s}"
+    logger.debug token["expires_in"]
 
     # use authorization to check channel sub
     oauth_opts = {
       "Client-ID": ENV["TWITCH_CLIENT_ID"],
-      "Authorization" => "OAuth #{token["access_token"]}",
-      "Accept" => "application/vnd.twitchtv.v5+json"
+      "Authorization" => "Bearer #{token["access_token"]}",
+      "Accept" => "application/vnd.twitchtv.v6+json"
     }
 
-    response  = HTTP.headers(oauth_opts).get("https://api.twitch.tv/kraken")
-    user      = JSON.parse(response)
-    user_name = user["token"]["user_name"]
-    user_id   = user["token"]["user_id"]
 
-    logger.debug token["expires_in"]
+    # load user profile data
+    response  = HTTP.headers(oauth_opts).get("https://api.twitch.tv/helix/users")
+    user      = JSON.parse(response)
+
+    logger.debug "got twitch user :: #{user.to_s}"
+    display_name = user["data"][0]["display_name"]
+    user_name = user["data"][0]["login"]
+    user_id   = user["data"][0]["id"]
 
     session[:is_auth]        = user_name
     session[:twitch_token]   = token
     session[:twitch_user]    = user_name
+    session[:twitch_name]    = display_name
     session[:twitch_id]      = user_id
     session[:twitch_expires] = Time.now + token["expires_in"]
 
