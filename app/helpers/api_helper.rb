@@ -7,8 +7,6 @@ module Stram
           return false
         end
 
-        logger.info "key: #{key}"
-        logger.info "env: #{ENV["BOTMAIN_API_KEY"]}"
         return ENV["BOTMAIN_API_KEY"].eql? key
       end
     end
