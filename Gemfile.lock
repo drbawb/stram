@@ -22,7 +22,7 @@ GEM
     eventmachine (1.2.7)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
-    ffi (1.13.1)
+    ffi (1.15.5)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -138,4 +138,4 @@ DEPENDENCIES
   thin
 
 BUNDLED WITH
-   2.2.16
+   2.2.26
