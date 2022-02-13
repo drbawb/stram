@@ -17,9 +17,9 @@ module Stram
       def client
         OAuth2::Client.new(ENV["TWITCH_CLIENT_ID"], 
                            ENV["TWITCH_CLIENT_SECRET"],
-                           site: "https://api.twitch.tv",
-                           authorize_url: "/kraken/oauth2/authorize",
-                           token_url: "/kraken/oauth2/token")
+                           site: "https://id.twitch.tv",
+                           authorize_url: "/oauth2/authorize",
+                           token_url: "/oauth2/token")
       end
 
       def clear_session
@@ -46,8 +46,8 @@ module Stram
 
           # get an authorization token
           begin 
-            auth_uri = URI::HTTPS.build(host: "api.twitch.tv",
-                                        path: "/kraken/oauth2/token")
+            auth_uri = URI::HTTPS.build(host: "id.twitch.tv",
+                                        path: "/oauth2/token")
             
             response = HTTP.post(auth_uri, params: login_opts)
             logger.debug response.body
